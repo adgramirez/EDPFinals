@@ -34,7 +34,7 @@ CREATE TABLE `signatories` (
   CONSTRAINT `signatories_department_ID` FOREIGN KEY (`department_ID`) REFERENCES `assignment_designation` (`designation_ID`),
   CONSTRAINT `signatories_employee_ID` FOREIGN KEY (`employee_ID`) REFERENCES `assignment_designation` (`employee_ID`),
   CONSTRAINT `signatories_superior_ID` FOREIGN KEY (`superior_ID`) REFERENCES `assignment_designation` (`employee_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `signatories` (
 
 LOCK TABLES `signatories` WRITE;
 /*!40000 ALTER TABLE `signatories` DISABLE KEYS */;
-INSERT INTO `signatories` VALUES (1,2,1,1),(2,3,1,1),(3,5,4,2),(4,6,4,2),(5,8,7,3),(6,9,7,3);
+INSERT INTO `signatories` VALUES (14,1,1,1),(15,1,1,1),(16,6,4,2),(17,6,4,2),(18,6,4,2),(19,5,4,2);
 /*!40000 ALTER TABLE `signatories` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-04  3:30:17
+-- Dump completed on 2024-05-02 10:47:44

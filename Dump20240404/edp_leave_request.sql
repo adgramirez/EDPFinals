@@ -36,7 +36,7 @@ CREATE TABLE `leave_request` (
   CONSTRAINT `leave_leave_status_ID` FOREIGN KEY (`leave_status_ID`) REFERENCES `leave_status` (`leave_status_ID`),
   CONSTRAINT `leave_leave_type_ID` FOREIGN KEY (`leave_type_ID`) REFERENCES `leave_type` (`leave_type_ID`),
   CONSTRAINT `leave_signatories_ID` FOREIGN KEY (`signatories_ID`) REFERENCES `signatories` (`signatories_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `leave_request` (
 
 LOCK TABLES `leave_request` WRITE;
 /*!40000 ALTER TABLE `leave_request` DISABLE KEYS */;
-INSERT INTO `leave_request` VALUES (1,1,'2024-04-04','2024-04-06',1,2),(2,2,'2024-04-04','2024-04-06',2,3),(3,3,'2024-04-04','2024-04-06',3,1),(4,4,'2024-04-04','2024-04-13',4,2),(5,5,'2024-04-13','2024-04-17',1,3),(6,6,'2024-04-08','2024-04-08',2,2);
+INSERT INTO `leave_request` VALUES (14,15,'2024-04-05','2024-04-05',1,1),(15,16,'2024-04-09','2024-04-10',1,1),(16,17,'2024-04-05','2024-04-06',1,1),(17,18,'2024-05-02','2024-05-03',2,1),(18,19,'2024-05-09','2024-05-10',1,2);
 /*!40000 ALTER TABLE `leave_request` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-04  3:30:17
+-- Dump completed on 2024-05-02 10:47:45

@@ -42,7 +42,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,123,'Aaron Daniel','Gaddi','Ramirez','098',1),(2,456,'John','Green','Doe','765',1),(3,789,'Jin ','Ho','Uriarte','432',1),(4,101,'Agustine James','Loayon','Salcedo','109',1),(5,112,'Kaedahara','Crux','Kazuha','876',1),(6,131,'Ma','Ling','Lami','543',1),(7,415,'John Kyle','Raiz','Lampa','210',1),(8,161,'Milky','Chiz','Yummy','987',1),(9,718,'Yugana','Kami','Chua','654',1);
+INSERT INTO `employee` VALUES (1,123,'Aaron Daniel','Gaddi','Ramirez','098',1),(2,456,'John','Green','Doe','765',1),(4,101,'Agustine James','Loayon','Salcedo','109',1),(5,112,'Kaedahara','Crux','Kazuha','876',1),(6,131,'Ma','Ling','Lami','543',1);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-04  3:30:18
+-- Dump completed on 2024-05-02 10:47:45

@@ -41,7 +41,7 @@ CREATE TABLE `assignment_designation` (
 
 LOCK TABLES `assignment_designation` WRITE;
 /*!40000 ALTER TABLE `assignment_designation` DISABLE KEYS */;
-INSERT INTO `assignment_designation` VALUES (1,1,1,'Regular'),(2,2,2,'Part Time'),(3,3,3,'Probation'),(4,4,4,'Regular'),(5,5,5,'Dismissed'),(6,6,6,'Part Time'),(7,7,7,'Regular'),(8,8,8,'Probation'),(9,9,9,'Dismissed');
+INSERT INTO `assignment_designation` VALUES (1,1,1,'Regular'),(2,2,2,'Part Time'),(4,4,4,'Regular'),(5,5,5,'Dismissed'),(6,6,6,'Part Time');
 /*!40000 ALTER TABLE `assignment_designation` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-04  3:30:18
+-- Dump completed on 2024-05-02 10:47:45
