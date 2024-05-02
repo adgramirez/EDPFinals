@@ -1,4 +1,4 @@
-//partially edited
+//not used
 
 import PropTypes from 'prop-types';
 import InputDate from '../../UI/InputDate';
