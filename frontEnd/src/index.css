@@ -1,0 +1,201 @@
+body{
+  background-color: rgb(255, 255, 255);
+}
+
+th {
+  padding: 10px;
+}
+
+table, th, td {
+  text-align: center;
+  background-color: #47afeb;
+  font-size: large;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: white;
+  border: 1px solid #ffffff;
+  border-collapse: collapse;
+}
+
+
+.tableHeaderEmployeeNo {
+  background-color: #0394e9;
+  font-size: 20px;
+  width: 105px; 
+}
+.tableHeaderName {
+  background-color: #0394e9;
+  font-size: 25px;
+  width: 132px;
+}
+.tableHeaderContact {
+  background-color: #0394e9;
+  font-size: 25px;
+  width: 140px;
+}
+.tableHeaderAddress {
+  background-color: #0394e9;
+  font-size: 25px;
+  width: 450px;
+}
+.tableHeaderDesignation {
+  background-color: #0394e9;
+  font-size: 25px;
+}
+.tableHeaderEmployeeType{
+  background-color: #0394e9;
+  font-size: 25px;
+  width: 159.1px;
+}
+.tableHeaderDepartment {
+  background-color: #0394e9;
+  font-size: 25px;
+  width: 164px;
+}
+.tableHeaderActions {
+  background-color: #0394e9;
+  font-size: 25px;
+  width: 221px;
+}
+
+.tableBody {
+  margin: 0 auto;
+}
+.employeeNumber{  
+  width: 120px;
+}
+.employeeName{
+  width: 142px;
+}
+.employeeContactInfo{  
+  width: 150px;
+}
+.employeeAddress{
+  width: 388px;
+}
+.employeeDesignation{
+  width: 145px;
+}
+.employeeType{
+  width: 178px;
+}
+
+.default-button {
+  height: 30px;
+  padding: 0px 6px;
+}
+
+.blue-button {
+  margin-top: 5px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: #3044ff;
+  color: white;
+  border: 2px solid #47afeb;
+  transition-duration: 250ms;
+}
+
+.blue-button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 2px solid #eb6500;
+}
+
+.table-button-container {
+  display: flex;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+.default-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button-container {
+  margin-top: 20px;
+  position: relative;
+  right: 0;
+}
+
+.add-employee-container {
+  text-align: center;
+  background-color: #47afeb;
+  color: white;
+  padding: 10px;
+  margin-top: 50px;
+  border: 2px solid white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; 
+}
+
+.add-employee-container-button{
+  background-color: palevioletred;
+}
+
+.add-employee-container h1{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.flex {
+  display: flex;
+  column-gap: 20px;
+}
+
+.left-align {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: left;
+}
+
+.edit-button{
+  width: 130px;
+  padding: 10px;
+  margin: 5px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: #47afeb;
+  color: white;
+  border: 2px solid limegreen;
+  transition-duration: 250ms;
+}
+
+.edit-button:hover{
+  cursor: pointer;
+  background-color: limegreen;
+  color: white;
+  border: 2px solid white;
+}
+
+
+.delete-button {
+  padding: 10px;
+  margin: 5px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color: #47afeb;
+  color: white;
+  border: 2px solid #e04747;
+  transition-duration: 250ms;
+}
+
+.delete-button:hover{
+    cursor: pointer;
+    background-color: #e04747;
+    color: white;
+    border: 2px solid #eb6500;
+}
+
+.requestLeaveButton{
+  width: 100px;
+  background-color: #0394e9;
+}
+
+.add-button-container{
+  width: 10%;
+}
+
+.addNewEmployee{
+  background-color: #0394e9;
+}
