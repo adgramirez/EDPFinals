@@ -4,10 +4,10 @@ import axios from 'axios';
 import DefaultButton from '../../UI/DefaultButton';
 import moment from 'moment';
 
-function LeaveTable({ setRequestLeaveVisibility, leaves, setLeaves }) {
+function LeaveTable({ setAddLeaveVisibility, leaves, setLeaves }) {
 
     const handleAdd = () => {
-        setRequestLeaveVisibility(true);
+        setAddLeaveVisibility(true);
     };
 
     const formatDateToDateTime = (date) => {
@@ -58,7 +58,7 @@ function LeaveTable({ setRequestLeaveVisibility, leaves, setLeaves }) {
 }   
 
 LeaveTable.propTypes = {
-    setRequestLeaveVisibility: PropTypes.func.isRequired,
+    setAddLeaveVisibility: PropTypes.func.isRequired,
     setEditLeaveVisibility: PropTypes.func.isRequired,
     leaves: PropTypes.array.isRequired,
     setLeaves: PropTypes.func.isRequired
