@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import InputBox from '../UI/InputBox';
 
-function WorkInput({ onTypeChange, onDesignationChange, onDepartmentChange }) {
+function WorkInput({ onTypeChange, onDesignationChange, onDepartmentChange, onSalaryChange, salary }) {
     const handleSelectChange = (e) => {
         const { id, value } = e.target;
         switch (id) {
@@ -51,8 +52,18 @@ function WorkInput({ onTypeChange, onDesignationChange, onDepartmentChange }) {
                     <option value="Information Technology">Information Technology</option>
                 </select>
             </div>
+            <div>
+            <p>(Daily Salary)</p>
+                <InputBox
+                    label="Ex. 256"
+                    onChange={(e) => onSalaryChange(e.target.value)}
+                    value={salary ? salary : undefined}
+                    />
+            </div>
         </div>
     );
 }
+
+
 
 export default WorkInput;

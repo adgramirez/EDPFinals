@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import DefaultButton from '../UI/DefaultButton';
 
-function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddEmployeeVisibility, editEmployeeVisibility, setEditEmployeeVisibility, setDeleteEmployeeVisibility }) {
+function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddEmployeeVisibility, setEditEmployeeVisibility }) {
     const handleAdd = () => {
         setAddEmployeeVisibility(true);
     };
@@ -34,6 +34,7 @@ function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddE
                 <th className="tableHeaderDesignation">Designation</th>
                 <th className="tableHeaderEmployeeType">Employee Type</th>
                 <th className="tableHeaderDepartment">Department</th>
+                <th className="tableHeaderDepartment">Daily Salary</th>
                 <th className="tableHeaderActions">Actions</th>
             </tr>
         </thead>
@@ -50,9 +51,13 @@ function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddE
                         <td className="employeeDesignation">{employee.designationName}</td>
                         <td className="employeeType ">{employee.employeeType}</td>
                         <td className="employeeDepartment">{employee.departmentName}</td>
+                        <td className="employeeDepartment">{employee.salary}</td>
                         <td>
                             <div className='edit-delete-buttons'>
+                                <p>
                                 <button className='edit-button' onClick={() => setEditEmployeeVisibility({ visibility: true, index: index })}>Edit Details</button>
+                                </p>
+                                
                                 <button className='delete-button' onClick={() => handleDelete(employee.employee_ID)}>Remove Employee</button>
                             </div>
                         </td>

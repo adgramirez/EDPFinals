@@ -31,6 +31,7 @@ function EditEmployee({ editEmployeeVisibility, setEditEmployeeVisibility, setEm
     const [selectedEmployeeType, setSelectedEmployeeType] = useState(employee.employeeType);
     const [selectedDesignation, setSelectedDesignation] = useState(employee.designationName);
     const [selectedDepartment, setSelectedDepartment] = useState(employee.departmentName);
+    const [salary, setSalary] = useState(employee.salary)
 
     const handleCancel = () => {
         setEditEmployeeVisibility({visibility: false, index: -1});
@@ -42,7 +43,8 @@ function EditEmployee({ editEmployeeVisibility, setEditEmployeeVisibility, setEm
             ...address,
             employeeType: selectedEmployeeType,
             designationName: selectedDesignation,
-            departmentName: selectedDepartment
+            departmentName: selectedDepartment,
+            salary: salary
         };
 
         console.log("Updated Employee: ", updatedEmployee)
@@ -69,9 +71,9 @@ function EditEmployee({ editEmployeeVisibility, setEditEmployeeVisibility, setEm
                 <h1>Edit Employee</h1>
                 <EditPersonalInput onPersonalChange={setPersonal} employee={employee}/>
                 <EditAddressInput onAddressChange={setAddress} employee={employee}/>
-                <WorkInput onTypeChange={setSelectedEmployeeType} onDesignationChange={setSelectedDesignation} onDepartmentChange={setSelectedDepartment}/>
+                <WorkInput onTypeChange={setSelectedEmployeeType} onDesignationChange={setSelectedDesignation} onDepartmentChange={setSelectedDepartment} salary={salary} setSalary={setSalary}/>
                 <div onClick={handleEditEmployee}>
-                    <DefaultButton label="Done"></DefaultButton>
+                    <DefaultButton label="Edit Employee"></DefaultButton>
                 </div>
                 <div onClick={handleCancel}>
                     <DefaultButton label="Cancel"></DefaultButton>

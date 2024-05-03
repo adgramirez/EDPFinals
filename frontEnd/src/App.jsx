@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import EmployeeTable from './components/Milestone2/EmployeeTable';
-import AddEmployee from './components/Milestone2/AddEmployee';
-import EditEmployee from './components/Milestone2/EditEmployee';
-import DeleteEmployee from './components/Milestone2/DeleteEmployee';
+
+import EmployeePage from './components/Pages/EmployeePage';
+import LeavePage from './components/Pages/LeavePage';
+import PayrollPage from './components/Pages/PayrollPage';
+import { Routes, Route } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import LeaveTable from './components/Milestone3/Leave/LeaveTable';
 import AddLeave from './components/Milestone3/Leave/AddLeave';
 
 function App() {
+  let navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [addEmployeeVisibility, setAddEmployeeVisibility] = useState(false);
   const [editEmployeeVisibility, setEditEmployeeVisibility] = useState({
     visibility: false,
     index: -1
   });
-  const [deleteEmployeeVisibility, setDeleteEmployeeVisibility] = useState(null);
+  const [deleteEmployeeVisibility, setDeleteEmployeeVisibility] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +34,19 @@ function App() {
   }, []);
 
   const [superiors, setSuperiors] = useState([]);
+
+  const employeePageProps = {
+    employees: employees,
+    setEmployees: setEmployees,
+    addEmployeeVisibility: addEmployeeVisibility,
+    setAddEmployeeVisibility: setAddEmployeeVisibility,
+    editEmployeeVisibility: editEmployeeVisibility,
+    setEditEmployeeVisibility: setEditEmployeeVisibility,
+    deleteEmployeeVisibility: deleteEmployeeVisibility,
+    setDeleteEmployeeVisibility: setDeleteEmployeeVisibility,
+    setSuperiors: setSuperiors
+  }
+
   const [leaves, setLeaves] = useState([]);
 
   //for Leave object
@@ -44,6 +60,31 @@ function App() {
   const [leaveStatuses, setLeaveStatuses] = useState([]);
 
   const [addLeaveVisibility, setAddLeaveVisibility] = useState(false);
+
+  const leavePageProps = {
+    leaves: leaves,
+    setLeaves: setLeaves,
+
+    selectedEmployee: selectedEmployee,
+    setSelectedEmployee: setSelectedEmployee,
+    selectedType: selectedType,
+    setSelectedType: setSelectedType,
+    selectedSuperior: selectedSuperior,
+    setSelectedSuperior: setSelectedSuperior,
+    selectedStatus: selectedStatus,
+    setSelectedStatus: setSelectedStatus,
+
+    leaveTypes: leaveTypes,
+    setLeaveTypes: setLeaveTypes,
+    leaveStatuses: leaveStatuses,
+    setLeaveStatuses: setLeaveStatuses,
+
+    addLeaveVisibility: addLeaveVisibility,
+    setAddLeaveVisibility: setAddLeaveVisibility,
+
+    employees: employees,
+    superiors: superiors
+  }
 
   useEffect(() => {
     const fetchLeaves = async () => {
@@ -67,73 +108,19 @@ function App() {
 }, []);
 
   return (
-    <div className='default-container'>
-      <div className='table-button-container'>
-        <EmployeeTable
-          employees={employees}
-          setEmployees={setEmployees}
-          addEmployeeVisibility={addEmployeeVisibility}
-          setAddEmployeeVisibility={setAddEmployeeVisibility}
-          editEmployeeVisibility={editEmployeeVisibility}
-          setEditEmployeeVisibility={setEditEmployeeVisibility}
-          setDeleteEmployeeVisibility={setDeleteEmployeeVisibility} 
-        />
-      </div>
-      <div className='default-container'>
-        {addEmployeeVisibility && (
-          <AddEmployee
-            setAddEmployeeVisibility={setAddEmployeeVisibility}
-            setEmployees={setEmployees}
-            setSuperiors={setSuperiors}
-          />
-        )}
-        {editEmployeeVisibility.visibility && (
-          <EditEmployee
-            editEmployeeVisibility={editEmployeeVisibility}
-            setEditEmployeeVisibility={setEditEmployeeVisibility}
-            setEmployees={setEmployees}
-            employees={employees}
-          />
-        )}
-        {deleteEmployeeVisibility && (
-          <DeleteEmployee
-            employeeNumber={deleteEmployeeVisibility}
-            setDeleteEmployeeVisibility={setDeleteEmployeeVisibility}
-            setEmployees={setEmployees}
-          />
-        )}
-      </div>
-
-      <div className='table-button-container'>
-        <LeaveTable 
-        leaves={leaves}
-        setRequestLeaveVisibility={setAddLeaveVisibility}
-        setLeaves={setLeaves}
-        />
-      </div>
-      <div className='default-container'>
-        {addLeaveVisibility && (<AddLeave
-            leaves={leaves}
-            setLeaves={setLeaves}
-            employee={selectedEmployee}
-            onEmployeeChange={setSelectedEmployee}
-            type={selectedType}
-            onTypeChange={setSelectedType}
-            superior={selectedSuperior}
-            onSuperiorChange={setSelectedSuperior}
-            status={selectedStatus}
-            onStatusChange={setSelectedStatus}
-            setRequestLeaveVisibility={setAddLeaveVisibility}
-            employees={employees}
-            superiors={superiors}
-            leaveStatuses={leaveStatuses}
-            leaveTypes={leaveTypes}
-            setLeaveTypes={setLeaveTypes} // Add this line
-            setLeaveStatuses={setLeaveStatuses} // Add this line
-          />
-        )}
-      </div>
-    </div>
+    <>
+      <button onClick={() => {navigate("/")}}>Employee Page</button>
+      <button onClick={() => {navigate("/leave")}}>Leave Page</button>
+      <button onClick={() => {navigate("/payroll")}}>Payroll Page</button>
+      <Routes>
+        <Route path='/' element={<EmployeePage {...employeePageProps}/>}/>
+        <Route path='/leave' element={<LeavePage {...leavePageProps}/>}/>
+        <Route path='/payroll' element={<PayrollPage/>}/>
+      </Routes>
+      
+      
+    </>
+    
   );
 }
 

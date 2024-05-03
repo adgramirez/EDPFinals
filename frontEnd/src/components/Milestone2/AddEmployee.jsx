@@ -28,24 +28,26 @@ function AddEmployee({ setAddEmployeeVisibility, setEmployees, setSuperiors }) {
     const [selectedEmployeeType, setSelectedEmployeeType] = useState('');
     const [selectedDesignation, setSelectedDesignation] = useState('');
     const [selectedDepartment, setSelectedDepartment] = useState('');
+    const [salary, setSalary] = useState('');
 
     const handleCancel = () => {
         setAddEmployeeVisibility(false);
     }
 
     const handleAddEmployee = async () => {
-        console.log("Personal Object:", personal);
-        console.log("Address Object:", address);
             const work = {
             employeeType: selectedEmployeeType,
             designationName: selectedDesignation,
-            departmentName: selectedDepartment
+            departmentName: selectedDepartment,
+            salary: salary
         }
         const employee = {
           ...personal,
           ...address,
           ...work
         };
+
+        console.log(employee)
       
         try {
           const response = await axios.post('http://localhost:8081/addEmployee', employee); 
@@ -70,7 +72,7 @@ function AddEmployee({ setAddEmployeeVisibility, setEmployees, setSuperiors }) {
                 <h1>Add Employee</h1>
                 <PersonalInput onPersonalChange={setPersonal} />
                 <AddressInput onAddressChange={setAddress}></AddressInput>
-                <WorkInput onTypeChange={setSelectedEmployeeType} onDesignationChange={setSelectedDesignation} onDepartmentChange={setSelectedDepartment}></WorkInput>
+                <WorkInput onTypeChange={setSelectedEmployeeType} onDesignationChange={setSelectedDesignation} onDepartmentChange={setSelectedDepartment} onSalaryChange={setSalary}></WorkInput>
                 <div onClick={handleAddEmployee}>
                     <DefaultButton className= "add-employee-container-button" label="Add Employee"></DefaultButton>
                 </div>
@@ -84,6 +86,8 @@ function AddEmployee({ setAddEmployeeVisibility, setEmployees, setSuperiors }) {
 
 AddEmployee.propTypes = {
     setAddEmployeeVisibility: PropTypes.func.isRequired,
+    setEmployees: PropTypes.func.isRequired,
+    setSuperiors: PropTypes.func.isRequired
 };
 
 export default AddEmployee;

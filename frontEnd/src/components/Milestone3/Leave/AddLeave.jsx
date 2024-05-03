@@ -4,7 +4,7 @@ import InputDate from '../../UI/InputDate';
 import DefaultButton from '../../UI/DefaultButton';
 import axios from 'axios';
 
-function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, superior, onSuperiorChange, status, onStatusChange, setRequestLeaveVisibility, employees, superiors, leaveTypes, leaveStatuses, setLeaveTypes, setLeaveStatuses }) {
+function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, superior, onSuperiorChange, status, onStatusChange, setAddLeaveVisibility, employees, superiors, leaveTypes, leaveStatuses, setLeaveTypes, setLeaveStatuses }) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [superiorOptions, setSuperiorOptions] = useState([]);
@@ -55,7 +55,7 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
     };
 
     const handleCancel = () => {
-        setRequestLeaveVisibility(false);
+        setAddLeaveVisibility(false);
     }
 
     const handleRequestLeave = async () => {
@@ -87,7 +87,7 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
             if (addLeaveResponse.status === 201) { 
                 // Fetch and update leaves after adding a leave
                 fetchAndUpdateLeaves();
-                setRequestLeaveVisibility(false);
+                setAddLeaveVisibility(false);
             } else {
                 console.error("Error adding leave:", addLeaveResponse.data);
             }
@@ -188,7 +188,7 @@ AddLeave.propTypes = {
     onSuperiorChange: PropTypes.func.isRequired,
     status: PropTypes.number.isRequired,
     onStatusChange: PropTypes.func.isRequired,
-    setRequestLeaveVisibility: PropTypes.func.isRequired,
+    setAddLeaveVisibility: PropTypes.func.isRequired,
     employees: PropTypes.array.isRequired,
     superiors: PropTypes.array.isRequired,
     leaveStatuses: PropTypes.array.isRequired,
