@@ -7,9 +7,6 @@ import PayrollPage from './components/Pages/PayrollPage';
 import { Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-import LeaveTable from './components/Milestone3/Leave/LeaveTable';
-import AddLeave from './components/Milestone3/Leave/AddLeave';
-
 function App() {
   let navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
@@ -86,6 +83,10 @@ function App() {
     superiors: superiors
   }
 
+  const payrollPageProps = {
+    employees: employees,
+  }
+
   useEffect(() => {
     const fetchLeaves = async () => {
         try {
@@ -115,7 +116,7 @@ function App() {
       <Routes>
         <Route path='/' element={<EmployeePage {...employeePageProps}/>}/>
         <Route path='/leave' element={<LeavePage {...leavePageProps}/>}/>
-        <Route path='/payroll' element={<PayrollPage/>}/>
+        <Route path='/payroll' element={<PayrollPage {...payrollPageProps}/>}/>
       </Routes>
       
       

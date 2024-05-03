@@ -1,26 +1,7 @@
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import DefaultButton from '../UI/DefaultButton';
 
-function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddEmployeeVisibility, setEditEmployeeVisibility }) {
-    const handleAdd = () => {
-        setAddEmployeeVisibility(true);
-    };
-    const handleDelete = async (employee_ID) => {
-        if (window.confirm('Are you sure you want to delete this employee?')) {
-            try {
-                const response = await axios.delete(`http://localhost:8081/deleteEmployee/${employee_ID}`);
-                if (response.status === 200) {
-                    console.log("Employee deleted successfully");
-                    setEmployees(prevEmployees => prevEmployees.filter(emp => emp.employee_ID !== employee_ID));
-                } else {
-                    console.error("Error deleting employee:", response.data);
-                }
-            } catch (error) {
-                console.error("Error deleting employee:", error);
-            }
-        }
-    };
+function EmployeeTable({ employees }) {
     
     return (
         <div>
@@ -55,10 +36,16 @@ function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddE
                         <td>
                             <div className='edit-delete-buttons'>
                                 <p>
-                                <button className='edit-button' onClick={() => setEditEmployeeVisibility({ visibility: true, index: index })}>Edit Details</button>
+                                <button className='edit-button' >Add Additional Earnings</button>
                                 </p>
                                 <p>
-                                <button className='delete-button' onClick={() => handleDelete(employee.employee_ID)}>Remove Employee</button>
+                                <button className='edit-button' >Add Deductions</button>
+                                </p>
+                                <p>
+                                <button className='delete-button' >Generate Payroll</button>
+                                </p>
+                                <p>
+                                <button className='delete-button' >Generate Payslip</button>
                                 </p>
                             </div>
                         </td>
@@ -71,9 +58,6 @@ function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddE
                     )}
                 </tbody>
             </table>
-            <div className='add-button-container' onClick={handleAdd}>
-                {!addEmployeeVisibility && <DefaultButton label="Add New Employee" classLabel="addNewEmployee"></DefaultButton>}
-            </div>
         </div>
     );
 }
