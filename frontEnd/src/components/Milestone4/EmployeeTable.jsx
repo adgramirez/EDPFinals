@@ -1,84 +1,95 @@
 import PropTypes from 'prop-types';
 import DefaultButton from '../UI/DefaultButton';
 
-function EmployeeTable({ employees, setAddAdditionalVisibility, setAddDeductionVisibility, setGeneratePayrollVisibility }) {
+function EmployeeTable({ employees, setAddAdditionalVisibility, setAddDeductionVisibility, setGeneratePayrollVisibility, payrollTableVisibility, setPayrollTableVisibility }) {
 
     function generatePayslip(index) {
+
         const employee = employees[index];
-        const additionalEarnings = employee.additionalEarnings;
+
+        if (employee.payroll) {
+            const additionalEarnings = employee.additionalEarnings;
     
-        let totalAdditionalEarnings = 0;
-    
-        if (additionalEarnings) {
-            if (additionalEarnings.bonus !== null) {
-                totalAdditionalEarnings += parseFloat(additionalEarnings.bonus);
+            let totalAdditionalEarnings = 0;
+        
+            if (additionalEarnings) {
+                if (additionalEarnings.bonus !== null) {
+                    totalAdditionalEarnings += parseFloat(additionalEarnings.bonus);
+                }
+                if (additionalEarnings.commission !== null) {
+                    totalAdditionalEarnings += parseFloat(additionalEarnings.commission);
+                }
+                if (additionalEarnings.allowance !== null) {
+                    totalAdditionalEarnings += parseFloat(additionalEarnings.allowance);
+                }
+                if (additionalEarnings.incentive !== null) {
+                    totalAdditionalEarnings += parseFloat(additionalEarnings.incentive);
+                }
+                if (additionalEarnings.severance !== null) {
+                    totalAdditionalEarnings += parseFloat(additionalEarnings.severance);
+                }
             }
-            if (additionalEarnings.commission !== null) {
-                totalAdditionalEarnings += parseFloat(additionalEarnings.commission);
+        
+            const deductions = employee.deductions;
+
+            let totalDeductions = 0;
+
+            if (deductions) {
+                if (deductions.healthAndSafetyViolation !== null) {
+                    totalDeductions += deductions.healthAndSafetyViolation;
+                }
+                if (deductions.damageToCompanyProperties !== null) {
+                    totalDeductions += deductions.damageToCompanyProperties;
+                }
+                if (deductions.companyPolicyViolation !== null) {
+                    totalDeductions += deductions.companyPolicyViolation;
+                }
+                if (deductions.pagibig !== null) {
+                    totalDeductions += deductions.pagibig;
+                }
+                if (deductions.sss !== null) {
+                    totalDeductions += deductions.sss;
+                }
+                if (deductions.philhealth !== null) {
+                    totalDeductions += deductions.philhealth;
+                }
+                if (deductions.taxIncome !== null) {
+                    totalDeductions += deductions.taxIncome;
+                }
             }
-            if (additionalEarnings.allowance !== null) {
-                totalAdditionalEarnings += parseFloat(additionalEarnings.allowance);
+
+            const netSalary = employee.payroll.grossSalary - totalDeductions + totalAdditionalEarnings;
+
+            const payslip = {
+                totalAdditionalEarnings: totalAdditionalEarnings,
+                totalDeductions: totalDeductions,
+                netSalary: netSalary
             }
-            if (additionalEarnings.incentive !== null) {
-                totalAdditionalEarnings += parseFloat(additionalEarnings.incentive);
+
+            const updatedEmployee = {
+                ...employee,
+                payslip
             }
-            if (additionalEarnings.severance !== null) {
-                totalAdditionalEarnings += parseFloat(additionalEarnings.severance);
-            }
+
+            console.log(updatedEmployee)
+
+            employees[index] = updatedEmployee;
+            console.log(employees);
+
+            window.alert(`PAYSLIP
+            Name: ${employee.lastName}, ${employee.firstName}
+            Additional earnings: P${totalAdditionalEarnings}
+            Deductions: P${totalDeductions}
+            Net Salary: P${netSalary}
+            `)
+        } else {
+            window.alert("Generate payroll first.")
         }
-    
-        const deductions = employee.deductions;
+        
+    }
 
-        let totalDeductions = 0;
-
-        if (deductions) {
-            if (deductions.healthAndSafetyViolation !== null) {
-                totalDeductions += deductions.healthAndSafetyViolation;
-            }
-            if (deductions.damageToCompanyProperties !== null) {
-                totalDeductions += deductions.damageToCompanyProperties;
-            }
-            if (deductions.companyPolicyViolation !== null) {
-                totalDeductions += deductions.companyPolicyViolation;
-            }
-            if (deductions.pagibig !== null) {
-                totalDeductions += deductions.pagibig;
-            }
-            if (deductions.sss !== null) {
-                totalDeductions += deductions.sss;
-            }
-            if (deductions.philhealth !== null) {
-                totalDeductions += deductions.philhealth;
-            }
-            if (deductions.taxIncome !== null) {
-                totalDeductions += deductions.taxIncome;
-            }
-        }
-
-        const netSalary = employee.payroll.grossSalary - totalDeductions + totalAdditionalEarnings;
-
-        const payslip = {
-            totalAdditionalEarnings: totalAdditionalEarnings,
-            totalDeductions: totalDeductions,
-            netSalary: netSalary
-        }
-
-        const updatedEmployee = {
-            ...employee,
-            payslip
-        }
-
-        console.log(updatedEmployee)
-
-        employees[index] = updatedEmployee;
-        console.log(employees);
-
-        window.alert(`PAYSLIP
-        Name: ${employee.lastName}, ${employee.firstName}
-        Additional earnings: P${totalAdditionalEarnings}
-        Deductions: P${totalDeductions}
-        Net Salary: P${netSalary}
-        `)
+    const handleGenerateOverallPayroll = () => {
+        setPayrollTableVisibility(true)
     }
     
     return (
@@ -136,7 +147,7 @@ function EmployeeTable({ employees, setAddAdditionalVisibility, setAddDeductionV
                     )}
                 </tbody>
             </table>
-            <div className='add-button-container' >
+            <div className='add-button-container' onClick={handleGenerateOverallPayroll}>
                 <DefaultButton label="Generate Overall Payroll" classLabel="addNewEmployee"></DefaultButton>
             </div>
         </div>

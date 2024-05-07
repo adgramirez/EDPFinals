@@ -102,6 +102,8 @@ function App() {
     visibility: false,
     index: -1
   });
+
+  const [payrollTableVisibility, setPayrollTableVisibility] = useState(false);
   
   const payrollPageProps = {
     employees: employees,
@@ -112,6 +114,8 @@ function App() {
     setAddDeductionVisibility: setAddDeductionVisibility,
     generatePayrollVisibility: generatePayrollVisibility,
     setGeneratePayrollVisibility: setGeneratePayrollVisibility,
+    payrollTableVisibility: payrollTableVisibility,
+    setPayrollTableVisibility: setPayrollTableVisibility
   }
 
   const [earningTypes, setEarningTypes] = useState("");

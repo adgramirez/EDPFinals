@@ -4,6 +4,7 @@ import EmployeeTable from '../Milestone4/EmployeeTable';
 import AddAdditional from '../Milestone4/AddAdditional';
 import AddDeduction from '../Milestone4/AddDeduction';
 import GeneratePayroll from '../Milestone4/GeneratePayroll';
+import PayrollTable from '../Milestone4/PayrollTable';
 
 function PayrollPage(props) {
 
@@ -15,6 +16,8 @@ function PayrollPage(props) {
           setAddAdditionalVisibility={props.setAddAdditionalVisibility}
           setAddDeductionVisibility={props.setAddDeductionVisibility}
           setGeneratePayrollVisibility={props.setGeneratePayrollVisibility}
+          payrollTableVisibility={props.payrollTableVisibility} 
+          setPayrollTableVisibility={props.setPayrollTableVisibility}
       />
       <div className='add-employee-container'>
         {props.addAdditionalVisibility.visibility && (
@@ -29,6 +32,11 @@ function PayrollPage(props) {
       <div className='add-employee-container'>
         {props.generatePayrollVisibility.visibility && (
           <GeneratePayroll employees={props.employees} generatePayrollVisibility={props.generatePayrollVisibility} setGeneratePayrollVisibility={props.setGeneratePayrollVisibility} />
+        )}
+      </div>
+      <div className='add-employee-container'>
+        {props.payrollTableVisibility && (
+          <PayrollTable employees={props.employees} payrollTableVisibility={props.payrollTableVisibility} setPayrollTableVisibility={props.setPayrollTableVisibility} />
         )}
       </div>
     </>
