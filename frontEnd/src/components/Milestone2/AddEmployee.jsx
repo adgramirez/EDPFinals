@@ -44,7 +44,19 @@ function AddEmployee({ setAddEmployeeVisibility, setEmployees, setSuperiors }) {
         const employee = {
           ...personal,
           ...address,
-          ...work
+          ...work,
+          bonus: null,
+          commission: null,
+          allowance: null,
+          incentive: null,
+          severance: null,
+          healthAndSafetyViolation: null,
+          damageToCompanyProperties: null,
+          companyPolicyViolation: null,
+          pagibig: null,
+          sss: null,
+          philhealth: null,
+          taxIncome: null,
         };
 
         console.log(employee)

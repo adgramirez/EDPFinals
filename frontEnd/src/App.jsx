@@ -10,6 +10,11 @@ import { useNavigate } from 'react-router-dom';
 function App() {
   let navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
+
+  const updateEmployees = (newEmployees) => {
+    setEmployees(newEmployees);
+};
+
   const [addEmployeeVisibility, setAddEmployeeVisibility] = useState(false);
   const [editEmployeeVisibility, setEditEmployeeVisibility] = useState({
     visibility: false,
@@ -83,9 +88,33 @@ function App() {
     superiors: superiors
   }
 
+  const [addAdditionalVisibility, setAddAdditionalVisibility] = useState({
+    visibility: false,
+    index: -1
+  });
+
+  const [addDeductionVisibility, setAddDeductionVisibility] = useState({
+    visibility: false,
+    index: -1
+  });
+
+  const [generatePayrollVisibility, setGeneratePayrollVisibility] = useState({
+    visibility: false,
+    index: -1
+  });
+  
   const payrollPageProps = {
     employees: employees,
+    updateEmployees: updateEmployees,
+    addAdditionalVisibility: addAdditionalVisibility,
+    setAddAdditionalVisibility: setAddAdditionalVisibility,
+    addDeductionVisibility: addDeductionVisibility,
+    setAddDeductionVisibility: setAddDeductionVisibility,
+    generatePayrollVisibility: generatePayrollVisibility,
+    setGeneratePayrollVisibility: setGeneratePayrollVisibility,
   }
+
+  const [earningTypes, setEarningTypes] = useState("");
 
   useEffect(() => {
     const fetchLeaves = async () => {
