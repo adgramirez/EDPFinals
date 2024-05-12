@@ -270,19 +270,22 @@ app.get('/leaves', (req, res) => {
       e.employeeNumber AS employeeNumber,
       CONCAT(e.firstName, ' ', e.middleName, ' ', e.lastName) AS employeeName,
       d.departmentName AS department,
-      l.StartLeave AS startLeave,
-      l.EndLeave AS endLeave,
-      lt.LeaveType AS leaveType,
+      lr.startLeave AS startDate,
+      lr.endLeave AS endDate,
       CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) AS superiorName,
-      ls.LeaveStatus AS leaveStatus
+      lt.leaveType AS leaveType,
+      ls.leaveStatus AS leaveStatus
     FROM 
-      leave_request AS l
-      INNER JOIN signatories AS sg ON l.signatories_ID = sg.signatories_ID
-      INNER JOIN employee AS e ON sg.employee_ID = e.employee_ID
-      INNER JOIN department AS d ON sg.department_ID = d.department_ID
-      INNER JOIN employee AS s ON sg.superior_ID = s.employee_ID
-      INNER JOIN leave_type AS lt ON l.leave_type_ID = lt.leave_type_ID
-      INNER JOIN leave_status AS ls ON l.leave_status_ID = ls.leave_status_ID;
+      leaverequest AS lr
+      JOIN signatories AS sg ON lr.signatories_ID = sg.signatories_ID
+      JOIN employee AS e ON sg.employee_ID = e.employee_ID
+      JOIN assignmentdesignation AS ad ON e.employee_ID = ad.employee_ID
+      JOIN designation AS des ON ad.designation_ID = des.designation_ID
+      JOIN department AS d ON des.department_ID = d.department_ID
+      JOIN employee AS s ON sg.superior_ID = s.employee_ID
+      JOIN leavetype AS lt ON lr.leaveType_ID = lt.leaveType_ID
+      JOIN leavestatus AS ls ON lr.leaveStatus_ID = ls.leaveStatus_ID
+    ;
   `;
   
   db.query(sql, (err, data) => {
@@ -296,7 +299,7 @@ app.get('/leaves', (req, res) => {
 });
 
 app.get('/leaveTypes', (req, res) => {
-  const sql = 'SELECT * FROM leave_type';
+  const sql = 'SELECT * FROM leavetype';
   db.query(sql, (err, data) => {
     if (err) return res.status(500).json({ error: "Internal Server Error" });
     return res.json(data);
@@ -304,7 +307,7 @@ app.get('/leaveTypes', (req, res) => {
 });
 
 app.get('/leaveStatuses', (req, res) => {
-  const sql = 'SELECT * FROM leave_status';
+  const sql = 'SELECT * FROM leavestatus';
   db.query(sql, (err, data) => {
     if (err) return res.status(500).on({ error: "Internal Server Error" });
     return res.json(data);
@@ -318,7 +321,7 @@ app.get('/superiors/:employee_ID', (req, res) => {
   // Query to fetch managers in the employee's department
   const sql = `
     SELECT e.*, dept.department_ID
-    FROM assignment_designation AS ad
+    FROM assignmentdesignation AS ad
     JOIN employee AS e ON ad.employee_id = e.employee_id
     JOIN designation AS d ON ad.designation_id = d.designation_id
     JOIN department AS dept ON d.department_id = dept.department_id
@@ -327,7 +330,7 @@ app.get('/superiors/:employee_ID', (req, res) => {
         FROM designation
         WHERE designation_id = (
             SELECT designation_id
-            FROM assignment_designation
+            FROM assignmentdesignation
             WHERE employee_ID = ?
         )
     );
@@ -349,14 +352,16 @@ app.post('/addLeave', (req, res) => {
   console.log("Employee ID:", leaveRequest.employee_ID);
   console.log("Superior ID:", leaveRequest.superior_ID);
   console.log("Department ID:", leaveRequest.department_ID);
-  console.log("Leave Type ID:", leaveRequest.leave_type_ID);
-  console.log("Leave Status ID:", leaveRequest.leave_status_ID);
+  console.log("Start Leave:", leaveRequest.startLeave);
+  console.log("End Leave:", leaveRequest.endLeave);
+  console.log("Leave Type ID:", leaveRequest.leaveType_ID);
+  console.log("Leave Status ID:", leaveRequest.leaveStatus_ID);
 
 
 
   // Insert into signatories table
-  const signatoriesSql = 'INSERT INTO signatories (employee_ID, superior_ID, department_ID) VALUES (?, ?, ?)';
-  db.query(signatoriesSql, [leaveRequest.employee_ID, leaveRequest.superior_ID, leaveRequest.department_ID], (err, signatoriesResult) => {
+  const signatoriesSql = 'INSERT INTO signatories (employee_ID, superior_ID) VALUES (?, ?)';
+  db.query(signatoriesSql, [leaveRequest.employee_ID, leaveRequest.superior_ID], (err, signatoriesResult) => {
       if (err) {
           console.error("Error adding signatories:", err);
           return res.status(500).json({ error: "Internal Server Error" });
@@ -364,8 +369,8 @@ app.post('/addLeave', (req, res) => {
       const signatories_ID = signatoriesResult.insertId;
 
       // Insert into leave table
-      const leaveSql = "INSERT INTO leave_request (signatories_ID, StartLeave, EndLeave, leave_type_ID, leave_status_ID) VALUES (?, ?, ?, ?, ?)";
-      db.query(leaveSql, [signatories_ID, leaveRequest.StartLeave, leaveRequest.EndLeave, leaveRequest.leave_type_ID, leaveRequest.leave_status_ID], (err) => {
+      const leaveSql = "INSERT INTO leaverequest (signatories_ID, startLeave, endLeave, leaveType_ID, leaveStatus_ID) VALUES (?, ?, ?, ?, ?)";
+      db.query(leaveSql, [signatories_ID, leaveRequest.startLeave, leaveRequest.endLeave, leaveRequest.leaveType_ID, leaveRequest.leaveStatus_ID], (err) => {
           if (err) {
               console.error("Error adding leave:", err);
               return res.status(500).json({ error: "Internal Server Error" });

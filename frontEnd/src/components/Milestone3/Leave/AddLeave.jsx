@@ -14,6 +14,7 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
             try {
                 const response = await axios.get(`http://localhost:8081/superiors/${employee}`);
                 setSuperiorOptions(response.data);
+                console.log("Selected Employee ID: ", employee);
                 console.log("Superior Options:", response.data); // Add this line
             } catch (error) {
                 console.error('Error fetching superiors:', error);
@@ -24,6 +25,16 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
     }, [employee]);
 
     useEffect(() => {
+        const fetchLeaves = async () => {
+            try {
+                const leavesResponse = await axios.get('http://localhost:8081/leaves');
+                return leavesResponse.data;
+            } catch (error) {
+                console.error("Error fetching leaves:", error);
+                return []; // Returning an empty array if there's an error
+            }
+        };
+        
         const fetchLeaveTypes = async () => {
           try {
             const response = await axios.get('http://localhost:8081/leaveTypes');
@@ -75,11 +86,11 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
                 employee_ID: selectedEmployee,
                 superior_ID: selectedSuperior,
                 department_ID: department_ID,
-                StartLeave: startDate,
-                EndLeave: endDate,
-                leave_type_ID: type,
-                leave_status_ID: status
-            };
+                startLeave: startDate,
+                endLeave: endDate,
+                leaveType_ID: type,
+                leaveStatus_ID: status
+            }
             console.log("Leave Request Data: ", leaveRequestData);
     
             // Send request to add leave
@@ -117,12 +128,11 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
                 <p>(Employee Name)</p>
                 <select id="employee" onChange={(e) => onEmployeeChange(e.target.value)}>
                     <option value="">Choose</option>
-                    {employees.map((employee, index) => {
-                        const employeeIndex = index +1; // Increment index by 1
-                        return (
-                            <option key={index} value={employeeIndex}>{employee.firstName + " " + employee.middleName + " " + employee.lastName}</option>
-                        );
-                    })}
+                    {employees.map((employee) => (
+                        <option key={employee.employee_ID} value={employee.employee_ID}>
+                            {employee.firstName + " " + employee.middleName + " " + employee.lastName}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -134,16 +144,6 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
             <div>
                 <p>(End Date)</p>
                 <InputDate onChange={(e) => handleEndChange(e)}/>
-            </div>
-            
-            <div>
-                <p>(Leave Type)</p>
-                <select id="leaveType" onChange={(e) => onTypeChange(e.target.value)}>
-                    <option value="">Choose</option>
-                    {leaveTypes.map((leaveType) => (
-                    <option key={leaveType.leave_type_ID} value={leaveType.leave_type_ID}>{leaveType.LeaveType}</option>
-                    ))}
-                </select>
             </div>
 
             <div>
@@ -159,14 +159,25 @@ function AddLeave({ setLeaves, employee, onEmployeeChange, type, onTypeChange, s
             </div>
 
             <div>
-                <p>(Status)</p>
-                <select id="status" onChange={(e) => onStatusChange(e.target.value)}>
+                <p>(Leave Type)</p>
+                <select id="leaveType" onChange={(e) => onTypeChange(e.target.value)}>
                     <option value="">Choose</option>
-                    {leaveStatuses.map((leaveStatus) => (
-                    <option key={leaveStatus.leave_status_ID} value={leaveStatus.leave_status_ID}>{leaveStatus.LeaveStatus}</option>
+                    {leaveTypes.map((leaveType) => (
+                    <option key={leaveType.leaveType_ID} value={leaveType.leaveType_ID}>{leaveType.leaveType}</option>
                     ))}
                 </select>
             </div>
+
+            <div>
+                <p>(Leave Status)</p>
+                <select id="leaveStatus" onChange={(e) => onStatusChange(e.target.value)}>
+                    <option value="">Choose</option>
+                    {leaveStatuses.map((leaveStatus) => (
+                    <option key={leaveStatus.leaveStatus_ID} value={leaveStatus.leaveStatus_ID}>{leaveStatus.leaveStatus}</option>
+                    ))}
+                </select>
+            </div>
+
             </div>
             <div onClick={handleRequestLeave}>
                 <DefaultButton label="Request Leave"></DefaultButton>

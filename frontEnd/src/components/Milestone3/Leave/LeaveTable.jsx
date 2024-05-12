@@ -4,7 +4,7 @@ import axios from 'axios';
 import DefaultButton from '../../UI/DefaultButton';
 import moment from 'moment';
 
-function LeaveTable({ setAddLeaveVisibility, leaves, setLeaves }) {
+function LeaveTable({ setAddLeaveVisibility, leaves, setLeaves}) {
 
     const handleAdd = () => {
         setAddLeaveVisibility(true);
@@ -13,6 +13,7 @@ function LeaveTable({ setAddLeaveVisibility, leaves, setLeaves }) {
     const formatDateToDateTime = (date) => {
         return moment.utc(date).local().format('YYYY-MM-DD');
     };
+    console.log(leaves)
 
     return (
         <div className="leaveDiv">
@@ -22,11 +23,12 @@ function LeaveTable({ setAddLeaveVisibility, leaves, setLeaves }) {
                         <th className="leaveTable">Employee No.</th>
                         <th className="leaveTable">Name</th>
                         <th className="leaveTable">Department</th>
-                        <th className="leaveTable">Start Date and Time</th>
-                        <th className="leaveTable">End Date and Time</th>
-                        <th className="leaveTable">Leave Type</th>
+                        <th className="leaveTable">Start Date</th>
+                        <th className="leaveTable">End Date</th>
                         <th className="leaveTable">Superior</th>
-                        <th className="leaveTable">Status</th>
+                        <th className="leaveTable">Leave Type</th>
+                        <th className="leaveTable">Leave Status</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -38,8 +40,8 @@ function LeaveTable({ setAddLeaveVisibility, leaves, setLeaves }) {
                                 <td>{leave.department}</td>
                                 <td>{formatDateToDateTime(leave.startLeave)}</td>
                                 <td>{formatDateToDateTime(leave.endLeave)}</td>
-                                <td>{leave.leaveType}</td>
                                 <td>{leave.superiorName}</td>
+                                <td>{leave.leaveType}</td>
                                 <td>{leave.leaveStatus}</td>
                             </tr>
                         ))
