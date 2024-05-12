@@ -47,7 +47,7 @@ function EmployeeTable({ employees, setEmployees, addEmployeeVisibility, setAddE
                         <td className="employeeNumber">{employee.employeeNumber}</td>
                         <td className="employeeName">{employee.firstName + " " + employee.middleName + " " + employee.lastName}</td>
                         <td className="employeeContactInfo">{employee.contactInformation}</td>
-                        <td className="employeeAddress">{employee.HouseNumber + ', ' + employee.Street + ', ' + employee.Barangay + ', ' + employee.City + ', ' + employee.Province + ', ' + employee.Country + ', ' + employee.ZIPcode}</td>
+                        <td className="employeeAddress">{employee.houseNumber + ', ' + employee.street + ', ' + employee.barangay + ', ' + employee.city + ', ' + employee.province + ', ' + employee.country + ', ' + employee.zipcode}</td>
                         <td className="employeeDesignation">{employee.designationName}</td>
                         <td className="employeeType ">{employee.employeeType}</td>
                         <td className="employeeDepartment">{employee.departmentName}</td>

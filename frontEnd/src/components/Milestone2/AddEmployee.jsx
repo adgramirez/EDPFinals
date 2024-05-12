@@ -16,13 +16,13 @@ function AddEmployee({ setAddEmployeeVisibility, setEmployees, setSuperiors }) {
     });
 
     const [address, setAddress] = useState({
-        HouseNumber: "",
-        Street: "",
-        Barangay: "",
-        City: "",
-        Province: "",
-        Country: "",
-        ZIPcode: ""
+        houseNumber: "",
+        street: "",
+        barangay: "",
+        city: "",
+        province: "",
+        country: "",
+        zipcode: ""
     });
 
     const [selectedEmployeeType, setSelectedEmployeeType] = useState('');

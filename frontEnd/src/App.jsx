@@ -7,6 +7,7 @@ import PayrollPage from './components/Pages/PayrollPage';
 import { Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+
 function App() {
   let navigate = useNavigate();
   const [employees, setEmployees] = useState([]);

@@ -9,20 +9,20 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "", //change pw
-  database: "edp"
+  password: "AdDU2202201425196", //change pw
+  database: "edpfinals"
 });
 
 app.get('/', (req, res) => {
   const sql = `
-  SELECT employee.*, address.*, designation.*, assignment_designation.employeeType, department.*
-  FROM assignment_designation
-  JOIN employee ON assignment_designation.employee_id = employee.employee_id
-  JOIN address ON employee.address_id = address.address_id
-  JOIN designation ON assignment_designation.designation_id = designation.designation_id
-  JOIN department ON designation.department_id = department.department_id
-  ORDER BY assignment_designation.assignment_designation_id, employee.employee_id;
-  `;
+    SELECT employee.*, address.*, designation.*, assignmentdesignation.employeeType, department.*
+      FROM assignmentdesignation
+      JOIN employee ON assignmentdesignation.employee_id = employee.employee_id
+      JOIN address ON employee.address_id = address.address_id
+      JOIN designation ON assignmentdesignation.designation_id = designation.designation_id
+      JOIN department ON designation.department_id = department.department_id
+      ORDER BY assignmentdesignation.assignmentdesignation_id, employee.employee_id;
+    `;
   db.query(sql, (err, data) => {
     if (err) return res.status(500).json({ error: "Internal Server Error" });
     //console.log(data);
@@ -32,13 +32,13 @@ app.get('/', (req, res) => {
 
 app.get('/employee', (req, res) => {
     const sql = `
-      SELECT employee.*, address.*, designation.*, assignment_designation.employeeType, department.*
-      FROM assignment_designation
-      JOIN employee ON assignment_designation.employee_id = employee.employee_id
-      JOIN address ON employee.address_id = address.address_id
-      JOIN designation ON assignment_designation.designation_id = designation.designation_id
-      JOIN department ON designation.department_id = department.department_id
-      ORDER BY assignment_designation.assignment_designation_id, employee.employee_id;
+      SELECT employee.*, address.*, designation.*, assignmentdesignation.employeeType, department.*
+        FROM assignmentdesignation
+        JOIN employee ON assignmentdesignation.employee_id = employee.employee_id
+        JOIN address ON employee.address_id = address.address_id
+        JOIN designation ON assignmentdesignation.designation_id = designation.designation_id
+        JOIN department ON designation.department_id = department.department_id
+        ORDER BY assignmentdesignation.assignmentdesignation_id, employee.employee_id;
     `;
     db.query(sql, (err, data) => {
         if (err) return res.status(500).json({ error: "Internal Server Error" });
@@ -53,13 +53,13 @@ app.post('/addEmployee', (req, res) => {
 
   // Add Address
   const address = {
-    HouseNumber: employeeData.HouseNumber,
-    Street: employeeData.Street,
-    Barangay: employeeData.Barangay,
-    City: employeeData.City,
-    Province: employeeData.Province,
-    Country: employeeData.Country,
-    ZIPcode: employeeData.ZIPcode
+    HouseNumber: employeeData.houseNumber,
+    Street: employeeData.street,
+    Barangay: employeeData.barangay,
+    City: employeeData.city,
+    Province: employeeData.province,
+    Country: employeeData.country,
+    ZIPcode: employeeData.zipcode
   };
   //console.log("Processed address data:", address);
   db.query("INSERT INTO address SET ?", address, (err, addressResult) => {
