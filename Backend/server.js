@@ -47,19 +47,6 @@ app.get('/employee', (req, res) => {
     });
 });
 
-app.get('/designationdepartment', (req, res) => {
-  const sql = `
-    SELECT d.designation_ID, d.designationName, d.department_ID, de.departmentName
-      FROM designation AS d
-      JOIN department AS de ON d.department_ID = de.department_ID;
-  `
-  db.query(sql, (err, data) => {
-    if (err) return res.status(500).json({ error: "Internal Server Error" });
-    //console.log(data);
-    return res.json(data);
-  });
-})
-
 app.post('/addEmployee', (req, res) => {
   const employeeData = req.body;
 
@@ -178,7 +165,7 @@ app.post('/addEmployee', (req, res) => {
 app.delete('/deleteEmployee/:employee_ID', (req, res) => {
   const { employee_ID } = req.params;
 
-  const sql = `DELETE FROM edp.employee WHERE employee_ID = ?;`;
+  const sql = `DELETE FROM edpfinals.employee WHERE employee_ID = ?;`;
   db.query(sql, [employee_ID], (err, result) => {
     if (err) {
       console.error("Error deleting employee:", err);
@@ -194,13 +181,11 @@ app.put('/editEmployee/:employee_ID', (req, res) => {
   const employeeData = req.body;
 
   db.query(`
-      SELECT a.address_ID, employeeType, d.designationName, dept.departmentName
-      FROM assignment_designation ad
-      JOIN employee e ON ad.employee_ID = e.employee_ID
-      JOIN address a ON e.address_ID = a.address_ID
-      JOIN designation d ON ad.designation_ID = d.designation_ID
-      JOIN department dept ON d.department_ID = dept.department_ID
-      WHERE ad.employee_ID = ?;
+    SELECT ad.assignmentdesignation_ID, a.address_ID, ad.designation_ID, ad.employeeType
+    FROM assignmentdesignation ad
+    JOIN employee e ON ad.employee_ID = e.employee_ID
+    JOIN address a ON e.address_ID = a.address_ID
+    WHERE ad.employee_ID = ?;
   `, [employeeId], (err, results) => {
 
     if (err) {
@@ -212,178 +197,69 @@ app.put('/editEmployee/:employee_ID', (req, res) => {
       console.error("No current employee details found for employee ID:", employeeId);
       return res.status(404).json({ error: "Employee not found" });
     }
-    const currentEmployeeDetails = results[0];
-    //console.log("Current Employee Details:", currentEmployeeDetails);
 
-    const currentDesignationName = currentEmployeeDetails.designationName;
-    const currentDepartmentName = currentEmployeeDetails.departmentName;
-    const currentEmployeeType = currentEmployeeDetails.employeeType;
+    const currentAssignmentDetails = results[0];
+    const currentDesignationId = currentAssignmentDetails.designation_ID;
+    const currentEmployeeType = currentAssignmentDetails.employeeType;
 
-    const isDesignationChanged = employeeData.designationName !== currentDesignationName;
-    const isDepartmentChanged = employeeData.departmentName !== currentDepartmentName;
     const isEmployeeTypeChanged = employeeData.employeeType !== currentEmployeeType;
-/*
-    console.log("isDesignationChanged: ", isDesignationChanged);
-    console.log("isDepartmentChanged: ", isDepartmentChanged);
-    console.log("isEmployeeTypeChanged: ", isEmployeeTypeChanged);
-    */
 
-    // Edit Employee
-    const updateEmployeeSql = `
-      UPDATE employee
-      SET employeeNumber = ?,
-        firstName = ?,
-        middleName = ?,
-        lastName = ?,
-        contactInformation = ?,
-        address_ID = ?
-      WHERE employee_ID = ?
-    `;
-
-    db.query(updateEmployeeSql, [
-      employeeData.employeeNumber,
-      employeeData.firstName,
-      employeeData.middleName,
-      employeeData.lastName,
-      employeeData.contactInformation,
-      currentEmployeeDetails.address_ID,
-      employeeId
-    ], (err) => {
+    // Update Designation and Department
+    db.query(`
+      SELECT designation_ID
+      FROM designation
+      WHERE designationName = ? AND department_ID = (
+        SELECT department_ID FROM department WHERE departmentName = ?
+      );
+    `, [employeeData.designationName, employeeData.departmentName], (err, designationResults) => {
       if (err) {
-        console.error("Error updating employee:", err);
+        console.error("Error fetching new designation ID:", err);
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      // Update Address
-      const updateAddressSql = `
-        UPDATE address
-        SET HouseNumber = ?,
-            Street = ?,
-            Barangay = ?,
-            City = ?,
-            Province = ?,
-            Country = ?,
-            ZIPcode = ?
-        WHERE address_ID = ?
-      `;
-
-      db.query(updateAddressSql, [
-        employeeData.HouseNumber,
-        employeeData.Street,
-        employeeData.Barangay,
-        employeeData.City,
-        employeeData.Province,
-        employeeData.Country,
-        employeeData.ZIPcode,
-        currentEmployeeDetails.address_ID
-      ], (err) => {
-        if (err) {
-          console.error("Error updating address:", err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-        //console.log("Address updated successfully:", employeeData);
-
-        // Update Designation and Department
-        if (isDesignationChanged) {
-          db.query(`
-            SELECT designation_ID
-            FROM assignment_designation
-            WHERE employee_ID = ?;
-          `, [employeeId], (err, results) => {
-              if (err) {
-                  console.error("Error fetching designation ID:", err);
-                  return res.status(500).json({ error: "Internal Server Error" });
-              }
-              if (results.length === 0) {
-                  console.error("No designation found for employee ID:", employeeId);
-                  return res.status(404).json({ error: "Designation not found" });
-              }      
-              const designationId = results[0].designation_ID;
-      
-              // Update Designation
-              const updateDesignationSql = `
-                UPDATE designation
-                SET designationName = ?
-                WHERE designation_ID = ?
-              `;
-
-              db.query(updateDesignationSql, [
-                  employeeData.designationName,
-                  designationId
-              ], (err) => {
-                  if (err) {
-                      console.error("Error updating designation:", err);
-                      return res.status(500).json({ error: "Internal Server Error" });
-                  }
-                  //console.log("Designation updated successfully:", employeeData.designationName);
-              });
-          });
-        }
-
-        // Update Department
-        if (isDepartmentChanged) {
-          db.query(`
-            SELECT department_ID
-            FROM designation
-            WHERE designation_ID = (
-                SELECT designation_ID
-                FROM assignment_designation
-                WHERE employee_ID = ?
-            );
-          `, [employeeId], (err, results) => {
-              if (err) {
-                  console.error("Error fetching department ID:", err);
-                  return res.status(500).json({ error: "Internal Server Error" });
-              }
-              if (results.length === 0) {
-                  console.error("No department found for employee ID:", employeeId);
-                  return res.status(404).json({ error: "Department not found" });
-              }
-              const departmentId = results[0].department_ID;
-      
-              const updateDepartmentSql = `
-                UPDATE department
-                SET departmentName = ?
-                WHERE department_ID = ?
-              `;
-      
-              db.query(updateDepartmentSql, [
-                  employeeData.departmentName,
-                  departmentId
-              ], (err) => {
-                  if (err) {
-                      console.error("Error updating department:", err);
-                      return res.status(500).json({ error: "Internal Server Error" });
-                  }
-                  //console.log("Department updated successfully:", employeeData.departmentName);
-              });
-          });
+      if (designationResults.length === 0) {
+        console.error("No matching designation found for the given department:", employeeData.designationName, employeeData.departmentName);
+        return res.status(404).json({ error: "Designation not found for the given department" });
       }
 
-      // Update EmployeeType
+      const newDesignationId = designationResults[0].designation_ID;
+
+      // Edit AssignmentDesignation
+      const updateAssignmentDesignationSql = `
+        UPDATE assignmentdesignation
+        SET designation_ID = ?, employeeType = ?
+        WHERE assignmentdesignation_ID = ?
+      `;
+
+      db.query(updateAssignmentDesignationSql, [newDesignationId, employeeData.employeeType, currentAssignmentDetails.assignmentdesignation_ID], (err) => {
+        if (err) {
+          console.error("Error updating assignmentdesignation:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        // Update EmployeeType if Changed
         if (isEmployeeTypeChanged) {
-          const updateAssignment_DesignationSql =`
-            UPDATE assignment_designation
+          const updateEmployeeTypeSql =`
+            UPDATE assignmentdesignation
             SET employeeType = ?
             WHERE employee_ID = ?
           `;
-  
-          db.query(updateAssignment_DesignationSql, [
-            employeeData.employeeType,
-            employeeId
-          ], (err) => {
+
+          db.query(updateEmployeeTypeSql, [employeeData.employeeType, employeeId], (err) => {
             if (err) {
               console.error("Error updating employee type:", err);
               return res.status(500).json({ error: "Internal Server Error" });
             }
           });
         }
-        //console.log("Employee updated successfully:", employeeData);
+
         res.status(200).json({ message: "Employee updated successfully" });
       });
     });
   });
 });
+
+
 
 
 // MILESTONE 03
