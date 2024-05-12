@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
--- Host: localhost    Database: edp
+-- Host: localhost    Database: edpfinals
 -- ------------------------------------------------------
 -- Server version	8.0.35
 
@@ -16,35 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `signatories`
+-- Table structure for table `employee`
 --
 
-DROP TABLE IF EXISTS `signatories`;
+DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `signatories` (
-  `signatories_ID` int NOT NULL AUTO_INCREMENT,
-  `employee_ID` int DEFAULT NULL,
-  `superior_ID` int DEFAULT NULL,
-  `department_ID` int DEFAULT NULL,
-  PRIMARY KEY (`signatories_ID`),
-  KEY `signatories_employee_ID_idx` (`employee_ID`),
-  KEY `signatories_superior_ID_idx` (`superior_ID`),
-  KEY `signatories_department_idx` (`department_ID`),
-  CONSTRAINT `signatories_department_ID` FOREIGN KEY (`department_ID`) REFERENCES `assignment_designation` (`designation_ID`),
-  CONSTRAINT `signatories_employee_ID` FOREIGN KEY (`employee_ID`) REFERENCES `assignment_designation` (`employee_ID`),
-  CONSTRAINT `signatories_superior_ID` FOREIGN KEY (`superior_ID`) REFERENCES `assignment_designation` (`employee_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `employee` (
+  `employee_ID` int NOT NULL AUTO_INCREMENT,
+  `employeeNumber` int DEFAULT NULL,
+  `firstName` varchar(45) DEFAULT NULL,
+  `middleName` varchar(45) DEFAULT NULL,
+  `lastName` varchar(45) DEFAULT NULL,
+  `contactInformation` varchar(45) DEFAULT NULL,
+  `address_ID` int DEFAULT NULL,
+  PRIMARY KEY (`employee_ID`),
+  KEY `employee_address_ID_idx` (`address_ID`),
+  CONSTRAINT `employee_address_ID` FOREIGN KEY (`address_ID`) REFERENCES `address` (`address_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `signatories`
+-- Dumping data for table `employee`
 --
 
-LOCK TABLES `signatories` WRITE;
-/*!40000 ALTER TABLE `signatories` DISABLE KEYS */;
-INSERT INTO `signatories` VALUES (14,1,1,1),(15,1,1,1),(16,6,4,2),(17,6,4,2),(18,6,4,2),(19,5,4,2);
-/*!40000 ALTER TABLE `signatories` ENABLE KEYS */;
+LOCK TABLES `employee` WRITE;
+/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+INSERT INTO `employee` VALUES (1,987,'Aaron Daniel','Gaddi','Ramirez','090909',1),(4,123,'John','Green','Doe','12313',4),(5,256,'Agustine James','Loayon','Salcedo','123123',5);
+/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-02 10:47:44
+-- Dump completed on 2024-05-12 21:57:08

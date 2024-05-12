@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
--- Host: localhost    Database: edp
+-- Host: localhost    Database: edpfinals
 -- ------------------------------------------------------
 -- Server version	8.0.35
 
@@ -16,34 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `employee`
+-- Table structure for table `leavetype`
 --
 
-DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `leavetype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee` (
-  `employee_ID` int NOT NULL AUTO_INCREMENT,
-  `employeeNumber` int DEFAULT NULL,
-  `firstName` varchar(45) DEFAULT NULL,
-  `middleName` varchar(45) DEFAULT NULL,
-  `lastName` varchar(45) DEFAULT NULL,
-  `contactInformation` varchar(45) DEFAULT NULL,
-  `address_ID` int DEFAULT NULL,
-  PRIMARY KEY (`employee_ID`),
-  KEY `employee.address_ID_idx` (`address_ID`),
-  CONSTRAINT `employee.address_ID` FOREIGN KEY (`address_ID`) REFERENCES `address` (`address_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `leavetype` (
+  `leaveType_ID` int NOT NULL AUTO_INCREMENT,
+  `leaveType` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`leaveType_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee`
+-- Dumping data for table `leavetype`
 --
 
-LOCK TABLES `employee` WRITE;
-/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,123,'Aaron Daniel','Gaddi','Ramirez','098',1),(2,456,'John','Green','Doe','765',1),(4,101,'Agustine James','Loayon','Salcedo','109',1),(5,112,'Kaedahara','Crux','Kazuha','876',1),(6,131,'Ma','Ling','Lami','543',1);
-/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+LOCK TABLES `leavetype` WRITE;
+/*!40000 ALTER TABLE `leavetype` DISABLE KEYS */;
+INSERT INTO `leavetype` VALUES (1,'Vacation'),(2,'Sick'),(3,'Maternity'),(4,'Paternity');
+/*!40000 ALTER TABLE `leavetype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-02 10:47:45
+-- Dump completed on 2024-05-12 21:57:09

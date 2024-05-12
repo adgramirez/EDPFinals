@@ -16,28 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `totaldeductions`
+-- Table structure for table `payslip`
 --
 
-DROP TABLE IF EXISTS `totaldeductions`;
+DROP TABLE IF EXISTS `payslip`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `totaldeductions` (
-  `totalDeductions_ID` int NOT NULL AUTO_INCREMENT,
-  `payslip_ID` int DEFAULT NULL,
-  PRIMARY KEY (`totalDeductions_ID`),
-  KEY `totaldeductions_payslip_ID_idx` (`payslip_ID`),
-  CONSTRAINT `totaldeductions_payslip_ID` FOREIGN KEY (`payslip_ID`) REFERENCES `payslip` (`paySlip_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `payslip` (
+  `paySlip_ID` int NOT NULL AUTO_INCREMENT,
+  `assignmentDesignation_ID` int DEFAULT NULL,
+  `payroll` int DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  PRIMARY KEY (`paySlip_ID`),
+  KEY `payslip_assignmentDesignation_ID_idx` (`assignmentDesignation_ID`),
+  CONSTRAINT `payslip_assignmentDesignation_ID` FOREIGN KEY (`assignmentDesignation_ID`) REFERENCES `assignmentdesignation` (`assignmentDesignation_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='			';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `totaldeductions`
+-- Dumping data for table `payslip`
 --
 
-LOCK TABLES `totaldeductions` WRITE;
-/*!40000 ALTER TABLE `totaldeductions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `totaldeductions` ENABLE KEYS */;
+LOCK TABLES `payslip` WRITE;
+/*!40000 ALTER TABLE `payslip` DISABLE KEYS */;
+INSERT INTO `payslip` VALUES (1,1,31000,'2024-05-12');
+/*!40000 ALTER TABLE `payslip` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-02 14:45:01
+-- Dump completed on 2024-05-12 21:57:07

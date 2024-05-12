@@ -16,28 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `payslip`
+-- Table structure for table `earningtype`
 --
 
-DROP TABLE IF EXISTS `payslip`;
+DROP TABLE IF EXISTS `earningtype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `payslip` (
-  `paySlip_ID` int NOT NULL AUTO_INCREMENT,
-  `assignmentDesignation_ID` int DEFAULT NULL,
-  PRIMARY KEY (`paySlip_ID`),
-  KEY `payslip_assignmentDesignation_ID_idx` (`assignmentDesignation_ID`),
-  CONSTRAINT `payslip_assignmentDesignation_ID` FOREIGN KEY (`assignmentDesignation_ID`) REFERENCES `assignmentdesignation` (`assignmentDesignation_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='			';
+CREATE TABLE `earningtype` (
+  `earningType_ID` int NOT NULL AUTO_INCREMENT,
+  `earningType` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`earningType_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `payslip`
+-- Dumping data for table `earningtype`
 --
 
-LOCK TABLES `payslip` WRITE;
-/*!40000 ALTER TABLE `payslip` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payslip` ENABLE KEYS */;
+LOCK TABLES `earningtype` WRITE;
+/*!40000 ALTER TABLE `earningtype` DISABLE KEYS */;
+INSERT INTO `earningtype` VALUES (1,'Bonus'),(2,'Commission'),(3,'Allowance'),(4,'Incentive'),(5,'Severance');
+/*!40000 ALTER TABLE `earningtype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-02 14:45:01
+-- Dump completed on 2024-05-12 21:57:08

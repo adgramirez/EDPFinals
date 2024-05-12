@@ -16,34 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `assignmentdesignation`
+-- Table structure for table `leaverequest`
 --
 
-DROP TABLE IF EXISTS `assignmentdesignation`;
+DROP TABLE IF EXISTS `leaverequest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `assignmentdesignation` (
-  `assignmentDesignation_ID` int NOT NULL AUTO_INCREMENT,
-  `employee_ID` int DEFAULT NULL,
-  `designation_ID` int DEFAULT NULL,
-  `employeeType` varchar(45) DEFAULT NULL,
-  `status` varchar(45) DEFAULT NULL,
-  `salary` decimal(2,0) DEFAULT NULL,
-  PRIMARY KEY (`assignmentDesignation_ID`),
-  KEY `assignmentdesignation_employee_ID_idx` (`employee_ID`),
-  KEY `assignmentdesignation_designation_ID_idx` (`designation_ID`),
-  CONSTRAINT `assignmentdesignation_designation_ID` FOREIGN KEY (`designation_ID`) REFERENCES `designation` (`designation_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `assignmentdesignation_employee_ID` FOREIGN KEY (`employee_ID`) REFERENCES `employee` (`employee_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `leaverequest` (
+  `leaveRequest_ID` int NOT NULL AUTO_INCREMENT,
+  `signatories_ID` int DEFAULT NULL,
+  `startLeave` date DEFAULT NULL,
+  `endLeave` date DEFAULT NULL,
+  `leaveType_ID` int DEFAULT NULL,
+  `leaveStatus_ID` int DEFAULT NULL,
+  PRIMARY KEY (`leaveRequest_ID`),
+  KEY `leaverequest_signatories_ID_idx` (`signatories_ID`),
+  KEY `leaverequest_leaveType_ID_idx` (`leaveType_ID`),
+  KEY `leaverequest_leaveStatus_ID_idx` (`leaveStatus_ID`),
+  CONSTRAINT `leaverequest_leaveStatus_ID` FOREIGN KEY (`leaveStatus_ID`) REFERENCES `leavestatus` (`leaveStatus_ID`),
+  CONSTRAINT `leaverequest_leaveType_ID` FOREIGN KEY (`leaveType_ID`) REFERENCES `leavetype` (`leaveType_ID`),
+  CONSTRAINT `leaverequest_signatories_ID` FOREIGN KEY (`signatories_ID`) REFERENCES `signatories` (`signatories_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `assignmentdesignation`
+-- Dumping data for table `leaverequest`
 --
 
-LOCK TABLES `assignmentdesignation` WRITE;
-/*!40000 ALTER TABLE `assignmentdesignation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `assignmentdesignation` ENABLE KEYS */;
+LOCK TABLES `leaverequest` WRITE;
+/*!40000 ALTER TABLE `leaverequest` DISABLE KEYS */;
+INSERT INTO `leaverequest` VALUES (2,8,'2024-05-12','2024-05-13',1,1),(5,12,'2024-05-12','2024-05-13',3,2),(6,13,'2024-05-12','2024-05-13',2,3);
+/*!40000 ALTER TABLE `leaverequest` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-02 14:45:02
+-- Dump completed on 2024-05-12 21:57:07

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
--- Host: localhost    Database: edp
+-- Host: localhost    Database: edpfinals
 -- ------------------------------------------------------
 -- Server version	8.0.35
 
@@ -24,15 +24,15 @@ DROP TABLE IF EXISTS `address`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `address` (
   `address_ID` int NOT NULL AUTO_INCREMENT,
-  `HouseNumber` varchar(45) DEFAULT NULL,
-  `Street` varchar(45) DEFAULT NULL,
-  `Barangay` varchar(45) DEFAULT NULL,
-  `City` varchar(45) DEFAULT NULL,
-  `Province` varchar(45) DEFAULT NULL,
-  `Country` varchar(45) DEFAULT NULL,
-  `ZIPcode` int DEFAULT NULL,
+  `houseNumber` varchar(45) DEFAULT NULL,
+  `street` varchar(45) DEFAULT NULL,
+  `barangay` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `province` varchar(45) DEFAULT NULL,
+  `country` varchar(45) DEFAULT NULL,
+  `zipcode` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`address_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'C1','Arellano','11-B','Davao','Davao del Sur','Philippines',8000);
+INSERT INTO `address` VALUES (1,'123','Arellano','11B','Davao','Davao del Sur','Philippines','8000'),(2,'B10','Aguila','Tibungco','Davao','Davao del Sur','Philippines ','8000'),(3,'','Aguila','Tibungco','Davao','Davao del Sur','Philippines','8000'),(4,'B1','Streetz','Barang','Citz','Probs','Count','999'),(5,'','Aguila','Tibungco','Davao','Davao del Sur','Philippines','8000');
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-02 10:47:45
+-- Dump completed on 2024-05-12 21:57:09
