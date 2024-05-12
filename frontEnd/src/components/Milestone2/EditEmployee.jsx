@@ -19,13 +19,13 @@ function EditEmployee({ editEmployeeVisibility, setEditEmployeeVisibility, setEm
     });
 
     const [address, setAddress] = useState({
-        HouseNumber: employee.HouseNumber,
-        Street: employee.Street,
-        Barangay: employee.Barangay,
-        City: employee.City,
-        Province: employee.Province,
-        Country: employee.Country,
-        ZIPcode: employee.ZIPcode
+        houseNumber: employee.HouseNumber,
+        street: employee.Street,
+        barangay: employee.Barangay,
+        city: employee.City,
+        province: employee.Province,
+        country: employee.Country,
+        zipcode: employee.ZIPcode
     });
 
     const [selectedEmployeeType, setSelectedEmployeeType] = useState(employee.employeeType);

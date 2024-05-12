@@ -47,21 +47,33 @@ app.get('/employee', (req, res) => {
     });
 });
 
+app.get('/designationdepartment', (req, res) => {
+  const sql = `
+    SELECT d.designation_ID, d.designationName, d.department_ID, de.departmentName
+      FROM designation AS d
+      JOIN department AS de ON d.department_ID = de.department_ID;
+  `
+  db.query(sql, (err, data) => {
+    if (err) return res.status(500).json({ error: "Internal Server Error" });
+    //console.log(data);
+    return res.json(data);
+  });
+})
+
 app.post('/addEmployee', (req, res) => {
   const employeeData = req.body;
-  //console.log("Received employee data:", employeeData);
 
   // Add Address
   const address = {
-    HouseNumber: employeeData.houseNumber,
-    Street: employeeData.street,
-    Barangay: employeeData.barangay,
-    City: employeeData.city,
-    Province: employeeData.province,
-    Country: employeeData.country,
-    ZIPcode: employeeData.zipcode
+    houseNumber: employeeData.houseNumber,
+    street: employeeData.street,
+    barangay: employeeData.barangay,
+    city: employeeData.city,
+    province: employeeData.province,
+    country: employeeData.country,
+    zipcode: employeeData.zipcode
   };
-  //console.log("Processed address data:", address);
+  
   db.query("INSERT INTO address SET ?", address, (err, addressResult) => {
     if (err) {
       console.error("Error adding address:", err);
@@ -69,68 +81,99 @@ app.post('/addEmployee', (req, res) => {
     }
     const address_ID = addressResult.insertId;
 
-    // Add Department
-    const department = {
-      departmentName: employeeData.departmentName
-    }
-    //console.log("Processed department data:", department);
-    db.query(
-      "INSERT INTO department SET ?", department, (err, departmentResult) => {
-        if (err) {
-          console.error("Error adding department:", err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-        const department_id = departmentResult.insertId;
+    // Check if Department Exists
+    db.query("SELECT department_ID FROM department WHERE departmentName = ?", employeeData.departmentName, (err, departmentRows) => {
+      if (err) {
+        console.error("Error checking department:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
 
+      let department_id;
+      if (departmentRows.length > 0) {
+        department_id = departmentRows[0].department_ID;
+        addDesignation(address_ID, department_id);
+      } else {
+        // Add Department
+        const department = {
+          departmentName: employeeData.departmentName
+        };
+        db.query("INSERT INTO department SET ?", department, (err, departmentResult) => {
+          if (err) {
+            console.error("Error adding department:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+          department_id = departmentResult.insertId;
+          addDesignation(address_ID, department_id);
+        });
+      }
+    });
+  });
+
+  function addDesignation(address_ID, department_id) {
+    // Check if Designation Exists
+    db.query("SELECT designation_ID FROM designation WHERE designationName = ? AND department_ID = ?", [employeeData.designationName, department_id], (err, designationRows) => {
+      if (err) {
+        console.error("Error checking designation:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      let designation_ID;
+      if (designationRows.length > 0) {
+        designation_ID = designationRows[0].designation_ID;
+        addEmployee(address_ID, designation_ID);
+      } else {
         // Add Designation
         const designation = {
           designationName: employeeData.designationName,
           department_ID: department_id,
         };
-    //console.log("Processed designation data:", designation);
-      db.query("INSERT INTO designation SET ?", designation, (err, designationResult) => {
-        if (err) {
-          console.error("Error adding designation:", err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-        const designation_ID = designationResult.insertId;
-      
-        // Add Employee 
-        const employee = {
-          employeeNumber: employeeData.employeeNumber,
-          firstName: employeeData.firstName,
-          middleName: employeeData.middleName,
-          lastName: employeeData.lastName,
-          contactInformation: employeeData.contactInformation,
-          address_ID: address_ID,
-        };
-        //console.log("Processed employee data:", employee);
-        db.query("INSERT INTO employee SET ?", employee, (err, employeeResult) => {
+        db.query("INSERT INTO designation SET ?", designation, (err, designationResult) => {
           if (err) {
-            console.error("Error adding employee:", err);
+            console.error("Error adding designation:", err);
             return res.status(500).json({ error: "Internal Server Error" });
           }
-          const employee_ID = employeeResult.insertId;
-
-          // Add Assignment_Designation
-          const assignment_designation = {
-            employee_ID: employee_ID,
-            designation_ID: designation_ID,
-            employeeType: employeeData.employeeType
-          };
-          //console.log("Processed assignment_designation data:",  assignment_designation);
-          db.query("INSERT INTO assignment_designation SET ?", assignment_designation, (err) => {
-            if (err) {
-              console.error("Error adding assignment_designation:", err);
-              return res.status(500).json({ error: "Internal Server Error" });
-            }
-            return res.status(201).json({ message: "Employee added successfully" });
-          });
+          designation_ID = designationResult.insertId;
+          addEmployee(address_ID, designation_ID);
         });
+      }
+    });
+  }
+
+  function addEmployee(address_ID, designation_ID) {
+    // Add Employee
+    const employee = {
+      employeeNumber: employeeData.employeeNumber,
+      firstName: employeeData.firstName,
+      middleName: employeeData.middleName,
+      lastName: employeeData.lastName,
+      contactInformation: employeeData.contactInformation,
+      address_ID: address_ID,
+    };
+    db.query("INSERT INTO employee SET ?", employee, (err, employeeResult) => {
+      if (err) {
+        console.error("Error adding employee:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      const employee_ID = employeeResult.insertId;
+
+      // Add AssignmentDesignation
+      const assignmentdesignation = {
+        employee_ID: employee_ID,
+        designation_ID: designation_ID,
+        employeeType: employeeData.employeeType,
+        salary: employeeData.salary
+      };
+      db.query("INSERT INTO assignmentdesignation SET ?", assignmentdesignation, (err) => {
+        if (err) {
+          console.error("Error adding assignmentdesignation:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+        return res.status(201).json({ message: "Employee added successfully" });
       });
     });
-  });
+  }
 });
+
 
 app.delete('/deleteEmployee/:employee_ID', (req, res) => {
   const { employee_ID } = req.params;
