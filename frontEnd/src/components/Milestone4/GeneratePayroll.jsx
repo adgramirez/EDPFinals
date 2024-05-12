@@ -10,6 +10,7 @@
 import { useState } from "react"
 import InputDate from "../UI/InputDate"
 import DefaultButton from "../UI/DefaultButton"
+import axios from 'axios';
 
 //payslip will get gross salary from employee.payroll.grosssalary
 //gross - deductions + earnings
@@ -35,50 +36,68 @@ function GeneratePayroll(props) {
     }
 
     const handleGeneratePayroll = async () => {
+            
         const formattedStartingDate = new Date(initialPayroll.startingDate);
-        const formattedEndingDate = new Date(initialPayroll.endingDate);
+            const formattedEndingDate = new Date(initialPayroll.endingDate);
 
-        const differenceInTime = formattedEndingDate.getTime() - formattedStartingDate.getTime();
-        const numberOfDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+            const differenceInTime = formattedEndingDate.getTime() - formattedStartingDate.getTime();
+            const numberOfDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
-        const grossSalary = parseFloat(employee.salary) * parseInt(numberOfDays);
+            const grossSalary = parseFloat(employee.salary) * parseInt(numberOfDays);
 
-        const payroll = {
-            date: initialPayroll.date,
-            startingDate: initialPayroll.startingDate,
-            endingDate: initialPayroll.endingDate,
-            numberOfDays: numberOfDays,
-            grossSalary: grossSalary
-        }
+            const payroll = {
+                date: initialPayroll.date,
+                startingDate: initialPayroll.startingDate,
+                endingDate: initialPayroll.endingDate,
+                numberOfDays: numberOfDays,
+                grossSalary: grossSalary
+            }
 
-        const updatedEmployee = {
-            ...employee,
-            payroll
-        }
+            const updatedEmployee = {
+                ...employee,
+                payroll
+            }
 
-        console.log(updatedEmployee)
+            console.log(updatedEmployee)
+            console.log("Employee ID: ", employee.employee_ID)
 
-        props.employees[props.generatePayrollVisibility.index] = updatedEmployee;
-        console.log(props.employees);
+            props.employees[props.generatePayrollVisibility.index] = updatedEmployee;
+            console.log(props.employees);
 
+            
+            console.log("salary: " + typeof(parseFloat(employee.salary)));
+            console.log(parseFloat(employee.salary));
+            console.log("numberOfDays: " + typeof(parseInt(numberOfDays)));
+            console.log(parseInt(numberOfDays));
+            console.log("gross: " + typeof(parseFloat(grossSalary).toFixed(2)));
+            console.log(parseInt(grossSalary));
+            
+            const payrollData = {
+                employee_ID: employee.employee_ID,
+                date: initialPayroll.date,
+                grossSalary: payroll.grossSalary
+            };
         
-        console.log("salary: " + typeof(parseFloat(employee.salary)));
-        console.log(parseFloat(employee.salary));
-        console.log("numberOfDays: " + typeof(parseInt(numberOfDays)));
-        console.log(parseInt(numberOfDays));
-        console.log("gross: " + typeof(parseFloat(grossSalary).toFixed(2)));
-        console.log(parseInt(grossSalary));
+            try {
+                const response = await axios.post('http://localhost:8081/generatePayroll', payrollData);
+                console.log(response.data); // Optional: log response from the server
+                window.alert(
+                    `Date: ${updatedEmployee.payroll.date}
+    
+                    Name: ${updatedEmployee.lastName}, ${updatedEmployee.firstName}
+                    Gross Salary: P${updatedEmployee.payroll.grossSalary}
+                    From ${updatedEmployee.payroll.startingDate} to ${updatedEmployee.payroll.endingDate}
 
-        window.alert(
-            `Date: ${updatedEmployee.payroll.date}
 
-            Name: ${updatedEmployee.lastName}, ${updatedEmployee.firstName}
-            Gross Salary: P${updatedEmployee.payroll.grossSalary}
-            From ${updatedEmployee.payroll.startingDate} to ${updatedEmployee.payroll.endingDate}
-            `
-        )
-
-        handleCancel();
+                    Payroll generated successfully!
+                    `
+                )
+            } catch (error) {
+                console.error("Error generating payroll:", error);
+                window.alert("Failed to generate payroll. Please try again later.");
+            }
+        
+            handleCancel();
     }
 
     const handleInputChange = (e, field) => {
