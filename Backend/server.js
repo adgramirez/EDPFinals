@@ -15,7 +15,7 @@ const db = mysql.createConnection({
 
 app.get('/', (req, res) => {
   const sql = `
-    SELECT employee.*, address.*, designation.*, assignmentdesignation.employeeType, department.*
+    SELECT employee.*, address.*, designation.*, department.*, assignmentdesignation.employeeType, assignmentdesignation.salary
       FROM assignmentdesignation
       JOIN employee ON assignmentdesignation.employee_id = employee.employee_id
       JOIN address ON employee.address_id = address.address_id
@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.get('/employee', (req, res) => {
     const sql = `
-      SELECT employee.*, address.*, designation.*, assignmentdesignation.employeeType, department.*
+      SELECT employee.*, address.*, designation.*, department.*, assignmentdesignation.employeeType, assignmentdesignation.salary
         FROM assignmentdesignation
         JOIN employee ON assignmentdesignation.employee_id = employee.employee_id
         JOIN address ON employee.address_id = address.address_id
