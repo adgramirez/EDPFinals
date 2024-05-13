@@ -552,6 +552,127 @@ app.post('/addadditional', (req, res) => {
 });
 
 
+app.post('/adddeduction', (req, res) => {
+    const { employee_ID, deductions } = req.body;
+    console.log("Employee ID: ", employee_ID);
+
+    // Step 1: Check if totaldeductions entry already exists for the employee
+    const checkTotalDeductionsSql = 'SELECT totalDeductions_ID FROM totaldeductions WHERE payslip_ID IN (SELECT payslip_ID FROM payslip WHERE assignmentDesignation_ID IN (SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?))';
+    db.query(checkTotalDeductionsSql, [employee_ID], (err, result) => {
+        if (err) {
+            console.error("Error checking total deductions:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        if (result.length > 0) {
+            // If total deductions entry already exists, use its ID for deductions
+            const totalDeductions_ID = result[0].totalDeductions_ID;
+            console.log("Total Deductions ID: ", totalDeductions_ID);
+            insertDeductions(totalDeductions_ID);
+        } else {
+            // If total deductions entry doesn't exist, create a new entry and use its ID for deductions
+            createTotalDeductions();
+        }
+    });
+
+    // Function to create a new totaldeductions entry
+    function createTotalDeductions() {
+        // Step 2: Find the assignmentDesignation_ID for the employee
+        const findAssignmentDesignationSql = 'SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?';
+        db.query(findAssignmentDesignationSql, [employee_ID], (err, result) => {
+            if (err) {
+                console.error("Error finding assignment designation:", err);
+                return res.status(500).json({ error: "Internal Server Error" });
+            }
+
+            if (result.length === 0) {
+                console.error("No assignment designation found for employee ID:", employee_ID);
+                return res.status(404).json({ error: "Assignment designation not found" });
+            }
+
+            const assignmentDesignation_ID = result[0].assignmentdesignation_ID;
+            console.log("Assignment Designation ID: ", assignmentDesignation_ID);
+
+            // Step 3: Find the payslip_ID for the assignmentDesignation_ID
+            const findPayslipSql = 'SELECT payslip_ID FROM payslip WHERE assignmentDesignation_ID = ?';
+            db.query(findPayslipSql, [assignmentDesignation_ID], (err, result) => {
+                if (err) {
+                    console.error("Error finding payslip:", err);
+                    return res.status(500).json({ error: "Internal Server Error" });
+                }
+
+                if (result.length === 0) {
+                    console.error("No payslip found for assignment designation ID:", assignmentDesignation_ID);
+                    return res.status(404).json({ error: "Payslip not found" });
+                }
+
+                const payslip_ID = result[0].payslip_ID;
+                console.log("Payslip ID: ", payslip_ID);
+
+                // Step 4: Insert the payslip_ID into the totalDeductions table
+                const insertTotalDeductionsSql = 'INSERT INTO totaldeductions (payslip_ID) VALUES (?)';
+                db.query(insertTotalDeductionsSql, [payslip_ID], (err, result) => {
+                    if (err) {
+                        console.error("Error adding total deductions:", err);
+                        return res.status(500).json({ error: "Internal Server Error" });
+                    }
+
+                    const totalDeductions_ID = result.insertId; // Get the auto-generated ID of the inserted row
+                    console.log("Total Deductions ID: ", totalDeductions_ID);
+
+                    insertDeductions(totalDeductions_ID);
+                });
+            });
+        });
+    }
+
+    // Function to insert deductions using the provided totalDeductions_ID
+    function insertDeductions(totalDeductions_ID) {
+        // Step 5: Insert deductions into the deductions table
+        const insertDeductionSql = 'INSERT INTO deductions (totalDeductions_ID, deductionType_ID, amount) VALUES (?, ?, ?)';
+        const deductionTypes = Object.keys(deductions);
+
+        deductionTypes.forEach((deductionType) => {
+            const amount = deductions[deductionType];
+            console.log("Amount: ", amount);
+            console.log("Deduction Type ID: ", deductionType);
+            // Check if the amount is not null before inserting
+            if (amount !== null) {
+                // Fetch deductionType_ID from deductiontype table
+                const findDeductionTypeSql = 'SELECT deductionType_ID FROM deductiontype WHERE deductionType = ?';
+                db.query(findDeductionTypeSql, [deductionType], (err, result) => {
+                    if (err) {
+                        console.error("Error finding deduction type:", err);
+                        return res.status(500).json({ error: "Internal Server Error" });
+                    }
+
+                    // Check if result is empty
+                    if (result.length > 0) {
+                        const deductionType_ID = result[0].deductionType_ID;
+                        const amount = deductions[deductionType];
+
+                        // Insert into deductions table
+                        db.query(insertDeductionSql, [totalDeductions_ID, deductionType_ID, amount], (err) => {
+                            if (err) {
+                                console.error("Error adding deduction:", err);
+                                return res.status(500).json({ error: "Internal Server Error" });
+                            }
+                        });
+                    } else {
+                        // Handle case where no deduction type was found
+                        console.error("No deduction type found");
+                        return res.status(404).json({ error: "Deduction type not found" });
+                    }
+                });
+
+            }
+        });
+
+        return res.status(201).json({ message: "Deductions added successfully" });
+    }
+});
+
+
 
 
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import InputBox from "../UI/InputBox";
 import DefaultButton from "../UI/DefaultButton";
+import axios from 'axios';
 
 function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibility }) {
 
@@ -14,16 +15,23 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
     }
 
     const handleAddDeduction = async () => {
-        const updatedEmployee = {
-            ...employee,
-            deductions
+        try {
+            const response = await axios.post('http://localhost:8081/adddeduction', {
+                employee_ID: employee.employee_ID, // Assuming employee id is stored as 'id'
+                deductions: deductions   
+            });
+            
+            console.log(response.data);
+    
+            if (response.status === 201) {
+                console.log("Deductions added successfully");
+            } else {
+                console.error("Failed to add deductions");
+            }
+        } catch (error) {
+            console.error("An error occurred:", error.message);
         }
-
-        console.log(updatedEmployee)
-
-        employees[addDeductionVisibility.index] = updatedEmployee;
-        console.log(employees);
-
+    
         handleCancel();
     }
 
@@ -58,12 +66,13 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
             <p>(Deduction Type)</p>
                 <select id="employeeType" onChange={(e) => setDeductionType(e.target.value)}>
                     <option value="0">Choose</option>
-                    <option value="healthAndSafetyViolation">Health and Safety Violation</option>
-                    <option value="damageToCompanyProperties">Damage to Company Properties</option>
-                    <option value="companyPolicyViolation">Company Policy Violation</option>
-                    <option value="pagibig">Pagibig</option>
-                    <option value="sss">SSS</option>
-                    <option value="philhealth">PhilHealth</option>
+                    <option value="Health And Safety Violation">Health and Safety Violation</option>
+                    <option value="Damage To Company Properties">Damage to Company Properties</option>
+                    <option value="Company Policy Violation">Company Policy Violation</option>
+                    <option value="PAGIBIG">Pagibig</option>
+                    <option value="SSS">SSS</option>
+                    <option value="PhilHealth">PhilHealth</option>
+                    <option value="Tax Income">Tax Income</option>
                 </select>
             </div>
             <div>
@@ -82,4 +91,3 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
 }
 
 export default AddDeduction;
-
