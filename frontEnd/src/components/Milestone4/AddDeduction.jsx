@@ -15,10 +15,25 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
     }
 
     const handleAddDeduction = async () => {
+        // Initialize an object to store the updated deductions
+        let updatedDeductions = { ...deductions };
+    
+        // Check if deduction type is selected
+        if (deductionType && ["pagibig", "sss", "philhealth", "taxIncome"].includes(deductionType)) {
+            // Compute automatic deduction amount
+            const automaticAmount = computeAutomaticDeduction(deductionType);
+    
+            // Update the deductions object with the automatic amount
+            updatedDeductions = {
+                ...updatedDeductions,
+                [deductionType]: automaticAmount,
+            };
+        }
+    
         try {
             const response = await axios.post('http://localhost:8081/adddeduction', {
-                employee_ID: employee.employee_ID, // Assuming employee id is stored as 'id'
-                deductions: deductions   
+                employee_ID: employee.employee_ID,
+                deductions: updatedDeductions   
             });
             
             console.log(response.data);
@@ -34,6 +49,8 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
     
         handleCancel();
     }
+    
+    
 
     const [deductions, setDeductions] = useState({
         healthAndSafetyViolation: employee.additionalDeduction && employee.additionalDeduction.healthAndSafetyViolation !== undefined ? employee.additionalDeduction.healthAndSafetyViolation : null,
@@ -59,33 +76,103 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
         console.log(deductions);
     }, [deductions]);
 
+    // Function to compute automatic deductions
+    const computeAutomaticDeduction = (type) => {
+        // Compute deduction based on employee's salary
+        const salary = employee.salary;
+        const netSalary = salary * 30;
+        const netAnnualSalary = netSalary * 12; // Assuming salary is available in the employee object
+        let amount = 0;
+        let taxableIncome = 0;
+        let fixedTax = 0;
+        let taxRate = 0;
+        let tax = 0;
+    
+        // Perform computation based on deduction type
+        switch (type) {
+            case "pagibig":
+                if (netSalary === 0) {
+                    amount = 0;
+                } else if (netSalary > 1000 && netSalary <= 1500) {
+                    amount = netSalary * 0.01; // 1% deduction if netSalary is between 1000 and 1500
+                } else if (netSalary > 1500) {
+                    amount = netSalary * 0.02; // 2% deduction if netSalary is greater than 1500
+                } // Assuming PAGIBIG deduction rate is 2% of salary
+                break;
+            case "sss":
+                amount = netSalary * 0.045;
+                break;
+            case "philhealth":
+                amount = netSalary * 0.05; // Assuming PhilHealth deduction rate is 5% of salary
+                break;
+            case "taxIncome":
+                if (0 <= netAnnualSalary && netAnnualSalary < 250000) {
+                    taxableIncome = 0;
+                    fixedTax = 0;
+                    taxRate = 0.0;
+                    amount = (taxableIncome * taxRate + fixedTax)/12;
+                } else if (250000 <= netAnnualSalary && netAnnualSalary < 400000) {
+                    taxableIncome = netAnnualSalary - 250000;
+                    fixedTax = 0;
+                    taxRate = 0.15;
+                    amount = (taxableIncome * taxRate + fixedTax)/12;
+                } else if (400000 <= netAnnualSalary && netAnnualSalary < 800000) {
+                    taxableIncome = netAnnualSalary - 400000;
+                    fixedTax = 22500/12;
+                    taxRate = 0.2;
+                    amount = (taxableIncome * taxRate + fixedTax)/12;
+                } else if (800000 <= netAnnualSalary && netAnnualSalary < 2000000) {
+                    taxableIncome = netAnnualSalary - 800000;
+                    fixedTax = 102500/12;
+                    taxRate = 0.25;
+                    tax = (taxableIncome * taxRate + fixedTax)/12;
+                } else if (2000000 <= netAnnualSalary && netAnnualSalary < 8000000) {
+                    taxableIncome = netAnnualSalary - 2000000;
+                    fixedTax = 402500/12;
+                    taxRate = 0.3;
+                    amount = (taxableIncome * taxRate + fixedTax)/12;
+                } else if (8000000 <= netAnnualSalary) {
+                    taxableIncome = netAnnualSalary - 8000000;
+                    fixedTax = 2202500/12;
+                    taxRate = 0.35;
+                    amount = (taxableIncome * taxRate + fixedTax)/12;
+                }
+                break;
+            default:
+                break;
+        }
+    
+        return amount.toFixed(2); // Round to 2 decimal places
+    };
+    
+
     return (
         <>
             <p>Add Deductions</p>
             <div>
-            <p>(Deduction Type)</p>
+                <p>(Deduction Type)</p>
                 <select id="employeeType" onChange={(e) => setDeductionType(e.target.value)}>
                     <option value="0">Choose</option>
-                    <option value="Health And Safety Violation">Health and Safety Violation</option>
-                    <option value="Damage To Company Properties">Damage to Company Properties</option>
-                    <option value="Company Policy Violation">Company Policy Violation</option>
-                    <option value="PAGIBIG">Pagibig</option>
-                    <option value="SSS">SSS</option>
-                    <option value="PhilHealth">PhilHealth</option>
-                    <option value="Tax Income">Tax Income</option>
+                    <option value="healthAndSafetyViolation">Health and Safety Violation</option>
+                    <option value="damageToCompanyProperties">Damage to Company Properties</option>
+                    <option value="companyPolicyViolation">Company Policy Violation</option>
+                    <option value="pagibig">PAGIBIG</option>
+                    <option value="sss">SSS</option>
+                    <option value="philhealth">PhilHealth</option>
+                    <option value="taxIncome">Tax Income</option>
                 </select>
             </div>
             <div>
                 <p>(Amount)</p>
-                <InputBox onChange={(e) => handleInputChange(e, deductionType)} />
+                {/* Disable input box for automatic deductions */}
+                <InputBox onChange={(e) => handleInputChange(e, deductionType)} value={deductionType && ["pagibig", "sss", "philhealth", "taxIncome"].includes(deductionType) ? computeAutomaticDeduction(deductionType) : deductions[deductionType]} disabled={deductionType && ["pagibig", "sss", "philhealth", "taxIncome"].includes(deductionType)} />
             </div>
             <div onClick={handleAddDeduction}>
-                    <DefaultButton className= "add-employee-container-button" label="Add Deduction"></DefaultButton>
+                <DefaultButton className="add-employee-container-button" label="Add Deduction"></DefaultButton>
             </div>
             <div onClick={handleCancel}>
-                    <DefaultButton className= "add-employee-container-button" label="Cancel"></DefaultButton>
+                <DefaultButton className="add-employee-container-button" label="Cancel"></DefaultButton>
             </div>
-
         </>
     )
 }
