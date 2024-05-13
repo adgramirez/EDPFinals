@@ -1,144 +1,85 @@
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import DefaultButton from '../UI/DefaultButton';
 
 function EmployeeTable({ employees, setAddAdditionalVisibility, setAddDeductionVisibility, setGeneratePayrollVisibility, payrollTableVisibility, setPayrollTableVisibility }) {
+    const [payslipData, setPayslipData] = useState(null);
 
-    function generatePayslip(index) {
-
-        const employee = employees[index];
-
-        if (employee.payroll) {
-            const additionalEarnings = employee.additionalEarnings;
-    
-            let totalAdditionalEarnings = 0;
-        
-            if (additionalEarnings) {
-                if (additionalEarnings.bonus !== null) {
-                    totalAdditionalEarnings += parseFloat(additionalEarnings.bonus);
-                }
-                if (additionalEarnings.commission !== null) {
-                    totalAdditionalEarnings += parseFloat(additionalEarnings.commission);
-                }
-                if (additionalEarnings.allowance !== null) {
-                    totalAdditionalEarnings += parseFloat(additionalEarnings.allowance);
-                }
-                if (additionalEarnings.incentive !== null) {
-                    totalAdditionalEarnings += parseFloat(additionalEarnings.incentive);
-                }
-                if (additionalEarnings.severance !== null) {
-                    totalAdditionalEarnings += parseFloat(additionalEarnings.severance);
-                }
-            }
-        
-            const deductions = employee.deductions;
-
-            let totalDeductions = 0;
-
-            if (deductions) {
-                if (deductions.healthAndSafetyViolation !== null) {
-                    totalDeductions += deductions.healthAndSafetyViolation;
-                }
-                if (deductions.damageToCompanyProperties !== null) {
-                    totalDeductions += deductions.damageToCompanyProperties;
-                }
-                if (deductions.companyPolicyViolation !== null) {
-                    totalDeductions += deductions.companyPolicyViolation;
-                }
-                if (deductions.pagibig !== null) {
-                    totalDeductions += deductions.pagibig;
-                }
-                if (deductions.sss !== null) {
-                    totalDeductions += deductions.sss;
-                }
-                if (deductions.philhealth !== null) {
-                    totalDeductions += deductions.philhealth;
-                }
-                if (deductions.taxIncome !== null) {
-                    totalDeductions += deductions.taxIncome;
-                }
-            }
-
-            const netSalary = employee.payroll.grossSalary - totalDeductions + totalAdditionalEarnings;
-
-            const payslip = {
-                totalAdditionalEarnings: totalAdditionalEarnings,
-                totalDeductions: totalDeductions,
-                netSalary: netSalary
-            }
-
-            const updatedEmployee = {
-                ...employee,
-                payslip
-            }
-
-            console.log(updatedEmployee)
-
-            employees[index] = updatedEmployee;
-            console.log(employees);
-
-            window.alert(`PAYSLIP
-            Name: ${employee.lastName}, ${employee.firstName}
-            Additional earnings: P${totalAdditionalEarnings}
-            Deductions: P${totalDeductions}
-            Net Salary: P${netSalary}
-            `)
-        } else {
-            window.alert("Generate payroll first.")
-        }
-        
+    function generatePayslip(employeeId) {
+        fetch(`http://localhost:8081/generatepayslip/${employeeId}`)
+            .then(response => response.json())
+            .then(data => {
+                setPayslipData(data);
+                displayPayslipAlert(data);
+            })
+            .catch(error => console.error('Error fetching payslip data:', error));
     }
+
+    const displayPayslipAlert = (data) => {
+        if (data) {
+            const { FullName, Payroll, TotalAdditionalEarnings, TotalDeductions, NetSalary } = data[0];
+            window.alert(`PAYSLIP
+            Name: ${FullName}
+            Payroll: P${Payroll}
+            Total Additional earnings: P${TotalAdditionalEarnings}
+            Total Deductions: P${TotalDeductions}
+            Net Salary: P${NetSalary}`);
+        } else {
+            window.alert("Error fetching payslip data.");
+        }
+    };
 
     const handleGenerateOverallPayroll = () => {
-        setPayrollTableVisibility(true)
+        setPayrollTableVisibility(true);
     }
-    
+
     return (
         <div>
             <table className="tableHeader">
-        <thead>
-            <tr>
-                <th className="tableHeaderEmployeeNo">Employee No.</th>
-                <th className="tableHeaderName">Name</th>
-                <th className="tableHeaderContact">Contact</th>
-                <th className="tableHeaderAddress">Address</th>
-                <th className="tableHeaderDesignation">Designation</th>
-                <th className="tableHeaderEmployeeType">Employee Type</th>
-                <th className="tableHeaderDepartment">Department</th>
-                <th className="tableHeaderDepartment">Daily Salary</th>
-                <th className="tableHeaderActions">Actions</th>
-            </tr>
-        </thead>
-    </table>
-    <table className="tableBody">
-        <tbody>
-            {employees.length > 0 ? (
-                employees.map((employee, index) => (
-                    <tr key={index}>
-                        <td className="employeeNumber">{employee.employeeNumber}</td>
-                        <td className="employeeName">{employee.firstName + " " + employee.middleName + " " + employee.lastName}</td>
-                        <td className="employeeContactInfo">{employee.contactInformation}</td>
-                        <td className="employeeAddress">{employee.houseNumber + ', ' + employee.street + ', ' + employee.barangay + ', ' + employee.city + ', ' + employee.province + ', ' + employee.country + ', ' + employee.zipcode}</td>
-                        <td className="employeeDesignation">{employee.designationName}</td>
-                        <td className="employeeType ">{employee.employeeType}</td>
-                        <td className="employeeDepartment">{employee.departmentName}</td>
-                        <td className="employeeDepartment">{employee.salary}</td>
-                        <td>
-                            <div className='edit-delete-buttons'>
-                                <p>
-                                <button className='edit-button' onClick={() => setAddAdditionalVisibility({ visibility: true, index: index })}>Add Additional Earnings</button>
-                                </p>
-                                <p>
-                                <button className='edit-button' onClick={() => setAddDeductionVisibility({ visibility: true, index: index })}>Add Deductions</button>
-                                </p>
-                                <p>
-                                <button className='delete-button' onClick={() => setGeneratePayrollVisibility({ visibility: true, index: index })}>Generate Payroll</button>
-                                </p>
-                                <p>
-                                <button className='delete-button' onClick={() => generatePayslip(index)}>Generate Payslip</button>
-                                </p>
-                            </div>
-                        </td>
+                <thead>
+                    <tr>
+                        <th className="tableHeaderEmployeeNo">Employee No.</th>
+                        <th className="tableHeaderName">Name</th>
+                        <th className="tableHeaderContact">Contact</th>
+                        <th className="tableHeaderAddress">Address</th>
+                        <th className="tableHeaderDesignation">Designation</th>
+                        <th className="tableHeaderEmployeeType">Employee Type</th>
+                        <th className="tableHeaderDepartment">Department</th>
+                        <th className="tableHeaderDepartment">Daily Salary</th>
+                        <th className="tableHeaderActions">Actions</th>
                     </tr>
+                </thead>
+            </table>
+            <table className="tableBody">
+                <tbody>
+                    {employees.length > 0 ? (
+                        employees.map((employee, index) => (
+                            <tr key={index}>
+                                <td className="employeeNumber">{employee.employeeNumber}</td>
+                                <td className="employeeName">{employee.firstName + " " + employee.middleName + " " + employee.lastName}</td>
+                                <td className="employeeContactInfo">{employee.contactInformation}</td>
+                                <td className="employeeAddress">{employee.houseNumber + ', ' + employee.street + ', ' + employee.barangay + ', ' + employee.city + ', ' + employee.province + ', ' + employee.country + ', ' + employee.zipcode}</td>
+                                <td className="employeeDesignation">{employee.designationName}</td>
+                                <td className="employeeType ">{employee.employeeType}</td>
+                                <td className="employeeDepartment">{employee.departmentName}</td>
+                                <td className="employeeDepartment">{employee.salary}</td>
+                                <td>
+                                    <div className='edit-delete-buttons'>
+                                        <p>
+                                            <button className='edit-button' onClick={() => setAddAdditionalVisibility({ visibility: true, index: index })}>Add Additional Earnings</button>
+                                        </p>
+                                        <p>
+                                            <button className='edit-button' onClick={() => setAddDeductionVisibility({ visibility: true, index: index })}>Add Deductions</button>
+                                        </p>
+                                        <p>
+                                            <button className='delete-button' onClick={() => setGeneratePayrollVisibility({ visibility: true, index: index })}>Generate Payroll</button>
+                                        </p>
+                                        <p>
+                                            <button className='delete-button' onClick={() => generatePayslip(employee.employee_ID)}>Generate Payslip</button>
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
                         ))
                     ) : (
                         <tr>
@@ -157,20 +98,20 @@ function EmployeeTable({ employees, setAddAdditionalVisibility, setAddDeductionV
 EmployeeTable.propTypes = {
     employees: PropTypes.arrayOf(
         PropTypes.shape({
-            // employee_ID: PropTypes.number.isRequired,
             employeeNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-            // name: PropTypes.string.isRequired,
             contactInformation: PropTypes.string.isRequired,
-            HouseNumber: PropTypes.string.isRequired,
-            Street: PropTypes.string.isRequired,
-            Barangay: PropTypes.string.isRequired,
-            City: PropTypes.string.isRequired,
-            Province: PropTypes.string.isRequired,
-            Country: PropTypes.string.isRequired,
-            ZIPcode: PropTypes.string.isRequired,
+            houseNumber: PropTypes.string.isRequired,
+            street: PropTypes.string.isRequired,
+            barangay: PropTypes.string.isRequired,
+            city: PropTypes.string.isRequired,
+            province: PropTypes.string.isRequired,
+            country: PropTypes.string.isRequired,
+            zipcode: PropTypes.string.isRequired,
             designationName: PropTypes.string.isRequired,
             employeeType: PropTypes.string.isRequired,
             departmentName: PropTypes.string.isRequired,
+            salary: PropTypes.number.isRequired,
+            employee_ID: PropTypes.number.isRequired,
         })
     ).isRequired,
     setEmployees: PropTypes.func.isRequired,
@@ -178,7 +119,6 @@ EmployeeTable.propTypes = {
     setAddEmployeeVisibility: PropTypes.func.isRequired,
     setDeleteEmployeeVisibility: PropTypes.func.isRequired,
     setEditEmployeeVisibility: PropTypes.func.isRequired,
-    // editEmployeeVisibility: PropTypes.bool.isRequired,
 };
 
 export default EmployeeTable;

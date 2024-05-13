@@ -27,7 +27,7 @@ function PayrollTable({ employees, payrollTableVisibility, setPayrollTableVisibi
                 <th className="tableHeaderEmployeeNo">Employee No.</th>
                 <th className="tableHeaderName">Name</th>
                 <th className="">Date</th>
-                <th className="">Gross Salary</th>
+                <th className="">Payroll</th>
                 <th className="">Additional Earnings</th>
                 <th className="">Deductions</th>
                 <th className="">Net Salary</th>
