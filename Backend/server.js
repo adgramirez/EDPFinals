@@ -410,6 +410,120 @@ app.post('/generatePayroll', (req, res) => {
 });
 
 
+
+app.post('/addadditional', (req, res) => {
+  const { employee_ID, additionalEarnings } = req.body;
+  console.log("Employee ID: ", employee_ID);
+
+  // Step 1: Check if totaladditionalearnings entry already exists for the employee
+  const checkTotalAdditionalEarningsSql = 'SELECT totalAdditionalEarnings_ID FROM totaladditionalearnings WHERE payslip_ID IN (SELECT payslip_ID FROM payslip WHERE assignmentDesignation_ID IN (SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?))';
+  db.query(checkTotalAdditionalEarningsSql, [employee_ID], (err, result) => {
+      if (err) {
+          console.error("Error checking total additional earnings:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (result.length > 0) {
+          // If total additional earnings entry already exists, use its ID for additionalearnings
+          const totalAdditionalEarnings_ID = result[0].totalAdditionalEarnings_ID;
+          console.log("Total Additional Earnings ID: ", totalAdditionalEarnings_ID);
+          insertAdditionalEarnings(totalAdditionalEarnings_ID);
+      } else {
+          // If total additional earnings entry doesn't exist, create a new entry and use its ID for additionalearnings
+          createTotalAdditionalEarnings();
+      }
+  });
+
+  // Function to create a new totaladditionalearnings entry
+  function createTotalAdditionalEarnings() {
+      // Step 2: Find the assignmentDesignation_ID for the employee
+      const findAssignmentDesignationSql = 'SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?';
+      db.query(findAssignmentDesignationSql, [employee_ID], (err, result) => {
+          if (err) {
+              console.error("Error finding assignment designation:", err);
+              return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+          if (result.length === 0) {
+              console.error("No assignment designation found for employee ID:", employee_ID);
+              return res.status(404).json({ error: "Assignment designation not found" });
+          }
+
+          const assignmentDesignation_ID = result[0].assignmentdesignation_ID;
+          console.log("Assignment Designation ID: ", assignmentDesignation_ID);
+
+          // Step 3: Find the payslip_ID for the assignmentDesignation_ID
+          const findPayslipSql = 'SELECT payslip_ID FROM payslip WHERE assignmentDesignation_ID = ?';
+          db.query(findPayslipSql, [assignmentDesignation_ID], (err, result) => {
+              if (err) {
+                  console.error("Error finding payslip:", err);
+                  return res.status(500).json({ error: "Internal Server Error" });
+              }
+
+              if (result.length === 0) {
+                  console.error("No payslip found for assignment designation ID:", assignmentDesignation_ID);
+                  return res.status(404).json({ error: "Payslip not found" });
+              }
+
+              const payslip_ID = result[0].payslip_ID;
+              console.log("Payslip ID: ", payslip_ID);
+
+              // Step 4: Insert the payslip_ID into the totalAdditionalEarnings table
+              const insertTotalAdditionalEarningsSql = 'INSERT INTO totaladditionalearnings (payslip_ID) VALUES (?)';
+              db.query(insertTotalAdditionalEarningsSql, [payslip_ID], (err, result) => {
+                  if (err) {
+                      console.error("Error adding total additional earnings:", err);
+                      return res.status(500).json({ error: "Internal Server Error" });
+                  }
+
+                  const totalAdditionalEarnings_ID = result.insertId; // Get the auto-generated ID of the inserted row
+                  console.log("Total Additional Earnings ID: ", totalAdditionalEarnings_ID);
+
+                  insertAdditionalEarnings(totalAdditionalEarnings_ID);
+              });
+          });
+      });
+  }
+
+  // Function to insert additional earnings using the provided totalAdditionalEarnings_ID
+  function insertAdditionalEarnings(totalAdditionalEarnings_ID) {
+      // Step 5: Insert additional earnings into the additionalearnings table
+      const insertAdditionalEarningsSql = 'INSERT INTO additionalearnings (totalAdditionalEarnings_ID, earningType_ID, amount) VALUES (?, ?, ?)';
+      const earningTypes = Object.keys(additionalEarnings);
+
+      earningTypes.forEach((earningType) => {
+          const amount = additionalEarnings[earningType];
+          // Check if the amount is not null before inserting
+          if (amount !== null) {
+              // Fetch earningType_ID from earningType table
+              const findEarningTypeSql = 'SELECT earningType_ID FROM earningtype WHERE earningType = ?';
+              db.query(findEarningTypeSql, [earningType], (err, result) => {
+                  if (err) {
+                      console.error("Error finding earning type:", err);
+                      return res.status(500).json({ error: "Internal Server Error" });
+                  }
+
+                  const earningType_ID = result[0].earningType_ID;
+
+                  // Insert into additionalEarnings table
+                  db.query(insertAdditionalEarningsSql, [totalAdditionalEarnings_ID, earningType_ID, amount], (err) => {
+                      if (err) {
+                          console.error("Error adding additional earnings:", err);
+                          return res.status(500).json({ error: "Internal Server Error" });
+                      }
+                  });
+              });
+          }
+      });
+
+      return res.status(201).json({ message: "Additional earnings added successfully" });
+  }
+});
+
+
+
+
+
 // LISTEN LISTEN LISTEN LISTEN LISTEN PAMINAW BA
 app.listen(8081, () => {
   console.log("listening");
