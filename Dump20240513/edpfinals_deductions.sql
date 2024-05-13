@@ -16,30 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `designation`
+-- Table structure for table `deductions`
 --
 
-DROP TABLE IF EXISTS `designation`;
+DROP TABLE IF EXISTS `deductions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `designation` (
-  `designation_ID` int NOT NULL AUTO_INCREMENT,
-  `designationName` varchar(45) DEFAULT NULL,
-  `department_ID` int DEFAULT NULL,
-  PRIMARY KEY (`designation_ID`),
-  KEY `designation_department_ID_idx` (`department_ID`),
-  CONSTRAINT `designation_department_ID` FOREIGN KEY (`department_ID`) REFERENCES `department` (`department_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `deductions` (
+  `deductions_ID` int NOT NULL AUTO_INCREMENT,
+  `totalDeductions_ID` int DEFAULT NULL,
+  `deductionType_ID` int DEFAULT NULL,
+  `amount` int DEFAULT NULL,
+  PRIMARY KEY (`deductions_ID`),
+  KEY `deductions_totalDeductions_ID_idx` (`totalDeductions_ID`),
+  KEY `deductions_deductionType_ID_idx` (`deductionType_ID`),
+  CONSTRAINT `deductions_deductionType_ID` FOREIGN KEY (`deductionType_ID`) REFERENCES `deductiontype` (`deductionType_ID`),
+  CONSTRAINT `deductions_totalDeductions_ID` FOREIGN KEY (`totalDeductions_ID`) REFERENCES `totaldeductions` (`totalDeductions_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `designation`
+-- Dumping data for table `deductions`
 --
 
-LOCK TABLES `designation` WRITE;
-/*!40000 ALTER TABLE `designation` DISABLE KEYS */;
-INSERT INTO `designation` VALUES (1,'Manager',1),(2,'Asst. Manager',1),(3,'Staff',1),(4,'Manager',2),(5,'Asst. Manager',2),(6,'Staff',2),(7,'Manager',3),(8,'Asst. Manager',3),(9,'Staff',3),(10,'Manager',4),(11,'Asst. Manager',4),(12,'Staff',4),(13,'Manager',5),(14,'Asst. Manager',5),(15,'Staff',5);
-/*!40000 ALTER TABLE `designation` ENABLE KEYS */;
+LOCK TABLES `deductions` WRITE;
+/*!40000 ALTER TABLE `deductions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `deductions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:09
+-- Dump completed on 2024-05-13 18:33:00

@@ -16,27 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `leavestatus`
+-- Table structure for table `leaverequest`
 --
 
-DROP TABLE IF EXISTS `leavestatus`;
+DROP TABLE IF EXISTS `leaverequest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `leavestatus` (
-  `leaveStatus_ID` int NOT NULL AUTO_INCREMENT,
-  `leaveStatus` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`leaveStatus_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `leaverequest` (
+  `leaveRequest_ID` int NOT NULL AUTO_INCREMENT,
+  `signatories_ID` int DEFAULT NULL,
+  `startLeave` date DEFAULT NULL,
+  `endLeave` date DEFAULT NULL,
+  `leaveType_ID` int DEFAULT NULL,
+  `leaveStatus_ID` int DEFAULT NULL,
+  PRIMARY KEY (`leaveRequest_ID`),
+  KEY `leaverequest_signatories_ID_idx` (`signatories_ID`),
+  KEY `leaverequest_leaveType_ID_idx` (`leaveType_ID`),
+  KEY `leaverequest_leaveStatus_ID_idx` (`leaveStatus_ID`),
+  CONSTRAINT `leaverequest_leaveStatus_ID` FOREIGN KEY (`leaveStatus_ID`) REFERENCES `leavestatus` (`leaveStatus_ID`),
+  CONSTRAINT `leaverequest_leaveType_ID` FOREIGN KEY (`leaveType_ID`) REFERENCES `leavetype` (`leaveType_ID`),
+  CONSTRAINT `leaverequest_signatories_ID` FOREIGN KEY (`signatories_ID`) REFERENCES `signatories` (`signatories_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `leavestatus`
+-- Dumping data for table `leaverequest`
 --
 
-LOCK TABLES `leavestatus` WRITE;
-/*!40000 ALTER TABLE `leavestatus` DISABLE KEYS */;
-INSERT INTO `leavestatus` VALUES (1,'Pending'),(2,'Approved'),(3,'Denied');
-/*!40000 ALTER TABLE `leavestatus` ENABLE KEYS */;
+LOCK TABLES `leaverequest` WRITE;
+/*!40000 ALTER TABLE `leaverequest` DISABLE KEYS */;
+/*!40000 ALTER TABLE `leaverequest` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:08
+-- Dump completed on 2024-05-13 18:33:01

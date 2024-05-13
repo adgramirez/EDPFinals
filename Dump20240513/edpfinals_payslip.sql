@@ -16,32 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `additionalearnings`
+-- Table structure for table `payslip`
 --
 
-DROP TABLE IF EXISTS `additionalearnings`;
+DROP TABLE IF EXISTS `payslip`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `additionalearnings` (
-  `additionalEarnings_ID` int NOT NULL AUTO_INCREMENT,
-  `totalAdditionalEarnings_ID` int DEFAULT NULL,
-  `earningType_ID` int DEFAULT NULL,
-  `amount` decimal(2,0) DEFAULT NULL,
-  PRIMARY KEY (`additionalEarnings_ID`),
-  KEY `additionalEarnings_totalAdditionalEarnings_ID_idx` (`totalAdditionalEarnings_ID`),
-  KEY `addtionalEarnings_earningType_ID_idx` (`earningType_ID`),
-  CONSTRAINT `additionalEarnings_totalAdditionalEarnings_ID` FOREIGN KEY (`totalAdditionalEarnings_ID`) REFERENCES `totaladditionalearnings` (`totalAdditionalEarnings_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `addtionalEarnings_earningType_ID` FOREIGN KEY (`earningType_ID`) REFERENCES `earningtype` (`earningType_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `payslip` (
+  `paySlip_ID` int NOT NULL AUTO_INCREMENT,
+  `assignmentDesignation_ID` int DEFAULT NULL,
+  `payroll` int DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  PRIMARY KEY (`paySlip_ID`),
+  KEY `payslip_assignmentDesignation_ID_idx` (`assignmentDesignation_ID`),
+  CONSTRAINT `payslip_assignmentDesignation_ID` FOREIGN KEY (`assignmentDesignation_ID`) REFERENCES `assignmentdesignation` (`assignmentDesignation_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='			';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `additionalearnings`
+-- Dumping data for table `payslip`
 --
 
-LOCK TABLES `additionalearnings` WRITE;
-/*!40000 ALTER TABLE `additionalearnings` DISABLE KEYS */;
-/*!40000 ALTER TABLE `additionalearnings` ENABLE KEYS */;
+LOCK TABLES `payslip` WRITE;
+/*!40000 ALTER TABLE `payslip` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payslip` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:09
+-- Dump completed on 2024-05-13 18:33:01

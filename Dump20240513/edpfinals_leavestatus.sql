@@ -16,33 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `address`
+-- Table structure for table `leavestatus`
 --
 
-DROP TABLE IF EXISTS `address`;
+DROP TABLE IF EXISTS `leavestatus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `address` (
-  `address_ID` int NOT NULL AUTO_INCREMENT,
-  `houseNumber` varchar(45) DEFAULT NULL,
-  `street` varchar(45) DEFAULT NULL,
-  `barangay` varchar(45) DEFAULT NULL,
-  `city` varchar(45) DEFAULT NULL,
-  `province` varchar(45) DEFAULT NULL,
-  `country` varchar(45) DEFAULT NULL,
-  `zipcode` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`address_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `leavestatus` (
+  `leaveStatus_ID` int NOT NULL AUTO_INCREMENT,
+  `leaveStatus` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`leaveStatus_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `address`
+-- Dumping data for table `leavestatus`
 --
 
-LOCK TABLES `address` WRITE;
-/*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'123','Arellano','11B','Davao','Davao del Sur','Philippines','8000'),(2,'B10','Aguila','Tibungco','Davao','Davao del Sur','Philippines ','8000'),(3,'','Aguila','Tibungco','Davao','Davao del Sur','Philippines','8000'),(4,'B1','Streetz','Barang','Citz','Probs','Count','999'),(5,'','Aguila','Tibungco','Davao','Davao del Sur','Philippines','8000');
-/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+LOCK TABLES `leavestatus` WRITE;
+/*!40000 ALTER TABLE `leavestatus` DISABLE KEYS */;
+INSERT INTO `leavestatus` VALUES (1,'Pending'),(2,'Approved'),(3,'Denied');
+/*!40000 ALTER TABLE `leavestatus` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:09
+-- Dump completed on 2024-05-13 18:33:00

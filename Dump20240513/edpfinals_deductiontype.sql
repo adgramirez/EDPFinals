@@ -16,31 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `payslip`
+-- Table structure for table `deductiontype`
 --
 
-DROP TABLE IF EXISTS `payslip`;
+DROP TABLE IF EXISTS `deductiontype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `payslip` (
-  `paySlip_ID` int NOT NULL AUTO_INCREMENT,
-  `assignmentDesignation_ID` int DEFAULT NULL,
-  `payroll` int DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  PRIMARY KEY (`paySlip_ID`),
-  KEY `payslip_assignmentDesignation_ID_idx` (`assignmentDesignation_ID`),
-  CONSTRAINT `payslip_assignmentDesignation_ID` FOREIGN KEY (`assignmentDesignation_ID`) REFERENCES `assignmentdesignation` (`assignmentDesignation_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='			';
+CREATE TABLE `deductiontype` (
+  `deductionType_ID` int NOT NULL AUTO_INCREMENT,
+  `deductionType` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`deductionType_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `payslip`
+-- Dumping data for table `deductiontype`
 --
 
-LOCK TABLES `payslip` WRITE;
-/*!40000 ALTER TABLE `payslip` DISABLE KEYS */;
-INSERT INTO `payslip` VALUES (1,1,31000,'2024-05-12');
-/*!40000 ALTER TABLE `payslip` ENABLE KEYS */;
+LOCK TABLES `deductiontype` WRITE;
+/*!40000 ALTER TABLE `deductiontype` DISABLE KEYS */;
+INSERT INTO `deductiontype` VALUES (1,'healthAndSafetyViolation'),(2,'damageToCompanyProperties'),(3,'companyPolicyViolation'),(4,'PAGIBIG'),(5,'SSS'),(6,'PHILHealth'),(7,'taxIncome');
+/*!40000 ALTER TABLE `deductiontype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:07
+-- Dump completed on 2024-05-13 18:33:00

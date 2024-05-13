@@ -16,27 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `earningtype`
+-- Table structure for table `additionalearnings`
 --
 
-DROP TABLE IF EXISTS `earningtype`;
+DROP TABLE IF EXISTS `additionalearnings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `earningtype` (
-  `earningType_ID` int NOT NULL AUTO_INCREMENT,
-  `earningType` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`earningType_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `additionalearnings` (
+  `additionalEarnings_ID` int NOT NULL AUTO_INCREMENT,
+  `totalAdditionalEarnings_ID` int DEFAULT NULL,
+  `earningType_ID` int DEFAULT NULL,
+  `amount` int DEFAULT NULL,
+  PRIMARY KEY (`additionalEarnings_ID`),
+  KEY `additionalEarnings_totalAdditionalEarnings_ID_idx` (`totalAdditionalEarnings_ID`),
+  KEY `addtionalEarnings_earningType_ID_idx` (`earningType_ID`),
+  CONSTRAINT `additionalEarnings_totalAdditionalEarnings_ID` FOREIGN KEY (`totalAdditionalEarnings_ID`) REFERENCES `totaladditionalearnings` (`totalAdditionalEarnings_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `addtionalEarnings_earningType_ID` FOREIGN KEY (`earningType_ID`) REFERENCES `earningtype` (`earningType_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `earningtype`
+-- Dumping data for table `additionalearnings`
 --
 
-LOCK TABLES `earningtype` WRITE;
-/*!40000 ALTER TABLE `earningtype` DISABLE KEYS */;
-INSERT INTO `earningtype` VALUES (1,'Bonus'),(2,'Commission'),(3,'Allowance'),(4,'Incentive'),(5,'Severance');
-/*!40000 ALTER TABLE `earningtype` ENABLE KEYS */;
+LOCK TABLES `additionalearnings` WRITE;
+/*!40000 ALTER TABLE `additionalearnings` DISABLE KEYS */;
+/*!40000 ALTER TABLE `additionalearnings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:08
+-- Dump completed on 2024-05-13 18:33:00

@@ -16,34 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `employee`
+-- Table structure for table `totaldeductions`
 --
 
-DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `totaldeductions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee` (
-  `employee_ID` int NOT NULL AUTO_INCREMENT,
-  `employeeNumber` int DEFAULT NULL,
-  `firstName` varchar(45) DEFAULT NULL,
-  `middleName` varchar(45) DEFAULT NULL,
-  `lastName` varchar(45) DEFAULT NULL,
-  `contactInformation` varchar(45) DEFAULT NULL,
-  `address_ID` int DEFAULT NULL,
-  PRIMARY KEY (`employee_ID`),
-  KEY `employee_address_ID_idx` (`address_ID`),
-  CONSTRAINT `employee_address_ID` FOREIGN KEY (`address_ID`) REFERENCES `address` (`address_ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `totaldeductions` (
+  `totalDeductions_ID` int NOT NULL AUTO_INCREMENT,
+  `payslip_ID` int DEFAULT NULL,
+  PRIMARY KEY (`totalDeductions_ID`),
+  KEY `totaldeductions_payslip_ID_idx` (`payslip_ID`),
+  CONSTRAINT `totaldeductions_payslip_ID` FOREIGN KEY (`payslip_ID`) REFERENCES `payslip` (`paySlip_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee`
+-- Dumping data for table `totaldeductions`
 --
 
-LOCK TABLES `employee` WRITE;
-/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,987,'Aaron Daniel','Gaddi','Ramirez','090909',1),(4,123,'John','Green','Doe','12313',4),(5,256,'Agustine James','Loayon','Salcedo','123123',5);
-/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+LOCK TABLES `totaldeductions` WRITE;
+/*!40000 ALTER TABLE `totaldeductions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `totaldeductions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:08
+-- Dump completed on 2024-05-13 18:33:01

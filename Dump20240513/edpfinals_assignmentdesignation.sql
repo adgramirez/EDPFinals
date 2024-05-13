@@ -16,32 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `deductions`
+-- Table structure for table `assignmentdesignation`
 --
 
-DROP TABLE IF EXISTS `deductions`;
+DROP TABLE IF EXISTS `assignmentdesignation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `deductions` (
-  `deductions_ID` int NOT NULL AUTO_INCREMENT,
-  `totalDeductions_ID` int DEFAULT NULL,
-  `deductionType_ID` int DEFAULT NULL,
-  `amount` decimal(2,0) DEFAULT NULL,
-  PRIMARY KEY (`deductions_ID`),
-  KEY `deductions_totalDeductions_ID_idx` (`totalDeductions_ID`),
-  KEY `deductions_deductionType_ID_idx` (`deductionType_ID`),
-  CONSTRAINT `deductions_deductionType_ID` FOREIGN KEY (`deductionType_ID`) REFERENCES `deductiontype` (`deductionType_ID`),
-  CONSTRAINT `deductions_totalDeductions_ID` FOREIGN KEY (`totalDeductions_ID`) REFERENCES `totaldeductions` (`totalDeductions_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `assignmentdesignation` (
+  `assignmentDesignation_ID` int NOT NULL AUTO_INCREMENT,
+  `employee_ID` int DEFAULT NULL,
+  `designation_ID` int DEFAULT NULL,
+  `employeeType` varchar(45) DEFAULT NULL,
+  `salary` int DEFAULT NULL,
+  PRIMARY KEY (`assignmentDesignation_ID`),
+  KEY `assignmentdesignation_employee_ID_idx` (`employee_ID`),
+  KEY `assignmentdesignation_designation_ID_idx` (`designation_ID`),
+  CONSTRAINT `assignmentdesignation_designation_ID` FOREIGN KEY (`designation_ID`) REFERENCES `designation` (`designation_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `assignmentdesignation_employee_ID` FOREIGN KEY (`employee_ID`) REFERENCES `employee` (`employee_ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `deductions`
+-- Dumping data for table `assignmentdesignation`
 --
 
-LOCK TABLES `deductions` WRITE;
-/*!40000 ALTER TABLE `deductions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `deductions` ENABLE KEYS */;
+LOCK TABLES `assignmentdesignation` WRITE;
+/*!40000 ALTER TABLE `assignmentdesignation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `assignmentdesignation` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:07
+-- Dump completed on 2024-05-13 18:33:00

@@ -16,27 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `leavetype`
+-- Table structure for table `employee`
 --
 
-DROP TABLE IF EXISTS `leavetype`;
+DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `leavetype` (
-  `leaveType_ID` int NOT NULL AUTO_INCREMENT,
-  `leaveType` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`leaveType_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `employee` (
+  `employee_ID` int NOT NULL AUTO_INCREMENT,
+  `employeeNumber` int DEFAULT NULL,
+  `firstName` varchar(45) DEFAULT NULL,
+  `middleName` varchar(45) DEFAULT NULL,
+  `lastName` varchar(45) DEFAULT NULL,
+  `contactInformation` varchar(45) DEFAULT NULL,
+  `address_ID` int DEFAULT NULL,
+  PRIMARY KEY (`employee_ID`),
+  KEY `employee_address_ID_idx` (`address_ID`),
+  CONSTRAINT `employee_address_ID` FOREIGN KEY (`address_ID`) REFERENCES `address` (`address_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `leavetype`
+-- Dumping data for table `employee`
 --
 
-LOCK TABLES `leavetype` WRITE;
-/*!40000 ALTER TABLE `leavetype` DISABLE KEYS */;
-INSERT INTO `leavetype` VALUES (1,'Vacation'),(2,'Sick'),(3,'Maternity'),(4,'Paternity');
-/*!40000 ALTER TABLE `leavetype` ENABLE KEYS */;
+LOCK TABLES `employee` WRITE;
+/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:09
+-- Dump completed on 2024-05-13 18:33:00

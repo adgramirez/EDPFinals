@@ -728,6 +728,70 @@ app.get('/generatepayslip/:employeeId', (req, res) => {
 });
 
 
+app.get('/generateoverall', (req, res) => {
+  const sql = `
+      SELECT 
+        e.employeeNumber AS EmployeeNumber,
+        CONCAT(e.firstName, ' ', COALESCE(e.middleName, ''), ' ', e.lastName) AS FullName,
+        ps.date AS Date,
+        ps.payRoll AS Payroll,
+        COALESCE(SUM(ae.amount), 0) AS TotalAdditionalEarnings,
+        COALESCE(SUM(d.amount), 0) AS TotalDeductions,
+        (ps.payRoll + COALESCE(SUM(ae.amount), 0) - COALESCE(SUM(d.amount), 0)) AS NetSalary
+      FROM 
+        employee e
+      JOIN 
+        assignmentdesignation ad ON e.employee_ID = ad.employee_ID
+      JOIN 
+        payslip ps ON ad.assignmentDesignation_ID = ps.assignmentDesignation_ID
+      LEFT JOIN 
+        (
+            SELECT 
+                tae.payslip_ID, 
+                SUM(ae.amount) AS amount
+            FROM 
+                totaladditionalearnings tae
+            JOIN 
+                additionalearnings ae ON tae.totalAdditionalEarnings_ID = ae.totalAdditionalEarnings_ID
+            GROUP BY 
+                tae.payslip_ID
+        ) ae ON ps.payslip_ID = ae.payslip_ID
+      LEFT JOIN 
+        (
+            SELECT 
+                td.payslip_ID, 
+                SUM(d.amount) AS amount
+            FROM 
+                totaldeductions td
+            JOIN 
+                deductions d ON td.totalDeductions_ID = d.totalDeductions_ID
+            GROUP BY 
+                td.payslip_ID
+        ) d ON ps.payslip_ID = d.payslip_ID
+      GROUP BY 
+        e.employee_ID, e.employeeNumber, FullName, ps.date, ps.payRoll
+
+      UNION ALL
+
+      SELECT 
+        NULL AS EmployeeNumber,
+        NULL AS FullName,
+        NULL AS Date,
+        SUM(ps.payRoll) AS TotalPayroll,
+        (SELECT SUM(amount) FROM additionalearnings) AS TotalAdditionalEarnings,
+        (SELECT SUM(amount) FROM deductions) AS TotalDeductions,
+        SUM(ps.payRoll) + (SELECT SUM(amount) FROM additionalearnings) - (SELECT SUM(amount) FROM deductions) AS TotalNetSalary
+      FROM 
+        payslip ps;
+  `;
+
+  db.query(sql, (err, data) => {
+      if (err) return res.status(500).json({ error: "Internal Server Error" });
+      return res.json(data);
+  });
+});
+
+
 
 // LISTEN LISTEN LISTEN LISTEN LISTEN PAMINAW BA
 app.listen(8081, () => {

@@ -16,27 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `department`
+-- Table structure for table `earningtype`
 --
 
-DROP TABLE IF EXISTS `department`;
+DROP TABLE IF EXISTS `earningtype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `department` (
-  `department_ID` int NOT NULL AUTO_INCREMENT,
-  `departmentName` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`department_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `earningtype` (
+  `earningType_ID` int NOT NULL AUTO_INCREMENT,
+  `earningType` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`earningType_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `department`
+-- Dumping data for table `earningtype`
 --
 
-LOCK TABLES `department` WRITE;
-/*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'Administration'),(2,'Human Resource'),(3,'Marketing'),(4,'Accounting'),(5,'Information Technology');
-/*!40000 ALTER TABLE `department` ENABLE KEYS */;
+LOCK TABLES `earningtype` WRITE;
+/*!40000 ALTER TABLE `earningtype` DISABLE KEYS */;
+INSERT INTO `earningtype` VALUES (1,'Bonus'),(2,'Commission'),(3,'Allowance'),(4,'Incentive'),(5,'Severance');
+/*!40000 ALTER TABLE `earningtype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-12 21:57:08
+-- Dump completed on 2024-05-13 18:33:00
