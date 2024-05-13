@@ -62,7 +62,7 @@ function EmployeeTable({ employees, setAddAdditionalVisibility, setAddDeductionV
                                 <td className="employeeDesignation">{employee.designationName}</td>
                                 <td className="employeeType ">{employee.employeeType}</td>
                                 <td className="employeeDepartment">{employee.departmentName}</td>
-                                <td className="employeeDepartment">{employee.salary}</td>
+                                <td className="employeeSalary">{employee.salary}</td>
                                 <td>
                                     <div className='edit-delete-buttons'>
                                         <p>

@@ -144,15 +144,14 @@ function App() {
 
   return (
     <>
-      <button onClick={() => {navigate("/")}}>Employee Page</button>
-      <button onClick={() => {navigate("/leave")}}>Leave Page</button>
-      <button onClick={() => {navigate("/payroll")}}>Payroll Page</button>
+      <button className="menu-button" onClick={() => {navigate("/")}}>Employee Page</button>
+      <button className="menu-button" onClick={() => {navigate("/leave")}}>Leave Page</button>
+      <button className="menu-button" onClick={() => {navigate("/payroll")}}>Payroll Page</button>
       <Routes>
         <Route path='/' element={<EmployeePage {...employeePageProps}/>}/>
         <Route path='/leave' element={<LeavePage {...leavePageProps}/>}/>
         <Route path='/payroll' element={<PayrollPage {...payrollPageProps}/>}/>
       </Routes>
-      
       
     </>
     

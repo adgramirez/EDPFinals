@@ -1,3 +1,21 @@
+h1 {
+  color: #0394e9;
+  display: block;
+  font-size: 3em;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  unicode-bidi: isolate;
+}
+
+.menu-button {
+  background-color:#0394e9 ;
+  color: white;
+  border: none; 
+  padding: 10px 20px;
+  cursor: pointer; 
+  margin-right: 10px;
+}
+
 body{
   background-color: rgb(255, 255, 255);
 }
@@ -57,31 +75,39 @@ table, th, td {
   width: 221px;
 }
 
-.tableBody {
-  margin: 0 auto;
+.tableBody tr td {
+  padding: 10px;
 }
 .employeeNumber{  
-  width: 120px;
+  width: 105px;
 }
 .employeeName{
-  width: 142px;
+  width: 132px;
 }
 .employeeContactInfo{  
-  width: 150px;
+  width: 140px;
 }
 .employeeAddress{
-  width: 388px;
+  width: 450px;
 }
 .employeeDesignation{
-  width: 145px;
+  width: 132px;
 }
 .employeeType{
-  width: 178px;
+  width: 159px;
 }
-
+.employeeDepartment{
+  width: 164px;
+}
+.employeeSalary{
+  width: 164px;
+}
 .default-button {
   height: 30px;
   padding: 0px 6px;
+}
+.edit-delete-buttons{
+  width: 221px;
 }
 
 .blue-button {
@@ -102,15 +128,15 @@ table, th, td {
 
 .table-button-container {
   display: flex;
-  margin: 0 auto;
+  margin: 0;
   margin-top: 40px;
 }
 
 .default-container {
-  display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  padding-top: 0;
 }
 
 .button-container {
@@ -132,6 +158,14 @@ table, th, td {
   align-items: center;
   gap: 15px; 
 }
+.add-employee-container div {
+  display: flex;
+  align-items: center; /* Align input fields vertically */
+}
+.add-employee-container div p {
+  margin-right: 10px; /* Add space between label and input */
+}
+
 
 .add-employee-container-button{
   background-color: palevioletred;
@@ -198,4 +232,56 @@ table, th, td {
 
 .addNewEmployee{
   background-color: #0394e9;
+}
+
+.flex {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  grid-gap: 1rem;
+}
+
+.flex > div:nth-child(n+4) {
+  grid-column: span 2;
+}
+
+tr {
+  display: table-row;
+  background-color: #e04747;
+  vertical-align: inherit;
+  unicode-bidi: isolate;
+  border-color: inherit;
+}
+
+.pEmployeeNumber{
+  margin-left: 0px;
+  width: 150px;
+}
+.pEmployeeName{
+  margin-left: 0px;
+  width: 150px;
+}
+.pEmployeeDate{
+  margin-left: 0px;
+  width: 150px;
+}
+.pEmployeePayroll{
+  margin-left: 0px;
+  width: 150px;
+}
+.pEmployeeAdditional{
+  margin-left: 0px;
+  width: 150px;
+}
+.pEmployeeDeductions{
+  margin-left: 0px;
+  width: 150px;
+}
+.pEmployeeNet{
+  margin-left: 0px;
+  width: 150px;
+}
+
+th {
+  padding: 10px;
+  width: 132px;
 }

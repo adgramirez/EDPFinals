@@ -40,42 +40,45 @@ function PayrollTable({ payrollTableVisibility, setPayrollTableVisibility }) {
 
     return (
         <>
-            <div>
-                <table className="tableHeader">
-                    <thead>
-                        <tr>
-                            <th className="tableHeaderEmployeeNo">Employee No.</th>
-                            <th className="tableHeaderName">Name</th>
-                            <th className="">Date of Payroll</th>
-                            <th className="">Payroll</th>
-                            <th className="">Additional Earnings</th>
-                            <th className="">Deductions</th>
-                            <th className="">Net Salary</th>
-                        </tr>
-                    </thead>
-                </table>
-                <table className="tableBody">
-                    <tbody>
-                        {payrollData.length > 0 ? (
-                            payrollData.map((employee, index) => (
-                                <tr key={index}>
-                                    <td className="employeeNumber">{employee.EmployeeNumber}</td>
-                                    <td className="employeeName">{employee.FullName}</td>
-                                    <td className="">{formatDate(employee.Date)}</td> {/* Format date here */}
-                                    <td className="">{employee.Payroll}</td>
-                                    <td className="">{employee.TotalAdditionalEarnings}</td>
-                                    <td className="">{employee.TotalDeductions}</td>
-                                    <td className="">{employee.NetSalary}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td id="empty-list-label" colSpan={7} className="border-black border border-solid border-collapse">No employees found</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <table className="payrollTable">
+        <thead>
+            <tr>
+                <th className="ptableHeaderEmployeeNo">Employee No.</th>
+                <th className="ptableHeaderName">Name</th>
+                <th className="ptableHeaderDate">Date of Payroll</th>
+                <th className="ptableHeaderPayroll">Payroll</th>
+                <th className="ptableHeaderAdditional">Additional Earnings</th>
+                <th className="ptableHeaderDeductions">Deductions</th>
+                <th className="ptableHeaderNet">Net Salary</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div style={{ textAlign: 'left' }}>
+    <table className="payrollTableBody">
+        <tbody>
+            {payrollData.length > 0 ? (
+                payrollData.map((employee, index) => (
+                    <tr key={index}>
+                        <td className="pEmployeeNumber">{employee.EmployeeNumber}</td>
+                        <td className="pEmployeeName">{employee.FullName}</td>
+                        <td className="pEmployeeDate">{formatDate(employee.Date)}</td> {/* Format date here */}
+                        <td className="pEmployeePayroll">{employee.Payroll}</td>
+                        <td className="pEmployeeAdditional">{employee.TotalAdditionalEarnings}</td>
+                        <td className="pEmployeeDeductions">{employee.TotalDeductions}</td>
+                        <td className="pEmployeeNet">{employee.NetSalary}</td>
+                    </tr>
+                ))
+            ) : (
+                <tr>
+                    <td id="empty-list-label" colSpan={7} className="border-black border border-solid border-collapse">No employees found</td>
+                </tr>
+            )}
+        </tbody>
+    </table>
+</div>
+</div>
         </>
     );
 }
