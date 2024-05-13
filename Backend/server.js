@@ -387,27 +387,58 @@ app.post('/addLeave', (req, res) => {
 app.post('/generatePayroll', (req, res) => {
   const { employee_ID, date, grossSalary } = req.body;
 
-  // Here you need to find the assignmentdesignation_ID for the employee
-  const findAssignmentDesignationSql = 'SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?';
-  db.query(findAssignmentDesignationSql, [employee_ID], (err, result) => {
+  // Check if a payslip entry already exists for the employee
+  const findExistingPayslipSql = 'SELECT payslip_ID FROM payslip WHERE assignmentDesignation_ID IN (SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?)';
+  db.query(findExistingPayslipSql, [employee_ID], (err, result) => {
       if (err) {
-          console.error("Error finding assignment designation:", err);
+          console.error("Error finding existing payslip:", err);
           return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      const assignmentDesignation_ID = result[0].assignmentdesignation_ID;
+      if (result.length > 0) {
+          // If a payslip entry already exists, update the existing entry
+          const payslip_ID = result[0].payslip_ID;
+          console.log("Payslip ID found: ", payslip_ID);
 
-      // Insert the payroll data into the payslip table
-      const insertPayrollSql = 'INSERT INTO payslip (assignmentDesignation_ID, date, payRoll) VALUES (?, ?, ?)';
-      db.query(insertPayrollSql, [assignmentDesignation_ID, date, grossSalary], (err) => {
+          const updatePayrollSql = 'UPDATE payslip SET date = ?, payRoll = ? WHERE payslip_ID = ?';
+          db.query(updatePayrollSql, [date, grossSalary, payslip_ID], (err) => {
+              if (err) {
+                  console.error("Error updating payroll:", err);
+                  return res.status(500).json({ error: "Internal Server Error" });
+              }
+              return res.status(200).json({ message: "Payroll updated successfully" });
+          });
+      } else {
+          // If no payslip entry exists, insert a new payslip entry
+          createNewPayslip();
+      }
+  });
+
+  // Function to create a new payslip entry
+  function createNewPayslip() {
+      // Find the assignmentdesignation_ID for the employee
+      const findAssignmentDesignationSql = 'SELECT assignmentdesignation_ID FROM assignmentdesignation WHERE employee_ID = ?';
+      db.query(findAssignmentDesignationSql, [employee_ID], (err, result) => {
           if (err) {
-              console.error("Error generating payroll:", err);
+              console.error("Error finding assignment designation:", err);
               return res.status(500).json({ error: "Internal Server Error" });
           }
-          return res.status(201).json({ message: "Payroll generated successfully" });
+
+          const assignmentDesignation_ID = result[0].assignmentdesignation_ID;
+
+          // Insert the payroll data into the payslip table
+          const insertPayrollSql = 'INSERT INTO payslip (assignmentDesignation_ID, date, payRoll) VALUES (?, ?, ?)';
+          db.query(insertPayrollSql, [assignmentDesignation_ID, date, grossSalary], (err) => {
+              if (err) {
+                  console.error("Error generating payroll:", err);
+                  return res.status(500).json({ error: "Internal Server Error" });
+              }
+              return res.status(201).json({ message: "Payroll generated successfully" });
+          });
       });
-  });
+  }
 });
+
 
 
 
