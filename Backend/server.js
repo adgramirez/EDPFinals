@@ -674,6 +674,33 @@ app.post('/adddeduction', (req, res) => {
 
 
 
+app.post('/generatepayslip', (req, res) => {
+  const employee_ID = req.body.employee_ID; // Assuming you're sending the employee ID from the frontend
+  const employee = getEmployeeById(employee_ID); // Function to retrieve employee details from the database
+
+  if (!employee || !employee.payroll) {
+      return res.status(400).json({ error: "Employee not found or payroll not generated" });
+  }
+
+  const additionalEarnings = employee.additionalEarnings || {};
+  const deductions = employee.deductions || {};
+
+  const totalAdditionalEarnings = Object.values(additionalEarnings).reduce((acc, curr) => acc + (curr ? parseFloat(curr) : 0), 0);
+  const totalDeductions = Object.values(deductions).reduce((acc, curr) => acc + (curr ? parseFloat(curr) : 0), 0);
+
+  const netSalary = employee.payroll - totalDeductions + totalAdditionalEarnings;
+
+  const payslip = {
+      grossSalary: employee.payroll,
+      totalAdditionalEarnings: totalAdditionalEarnings,
+      totalDeductions: totalDeductions,
+      netSalary: netSalary
+  };
+
+  // You can store the payslip in the database or send it back to the frontend
+  return res.status(200).json({ payslip: payslip });
+});
+
 
 
 // LISTEN LISTEN LISTEN LISTEN LISTEN PAMINAW BA

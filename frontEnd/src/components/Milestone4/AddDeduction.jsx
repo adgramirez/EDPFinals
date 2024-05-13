@@ -80,8 +80,8 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
     const computeAutomaticDeduction = (type) => {
         // Compute deduction based on employee's salary
         const salary = employee.salary;
-        const netSalary = salary * 30;
-        const netAnnualSalary = netSalary * 12; // Assuming salary is available in the employee object
+        const grossSalary = salary * 30;
+        const grossAnnualSalary = grossSalary * 12; // Assuming salary is available in the employee object
         let amount = 0;
         let taxableIncome = 0;
         let fixedTax = 0;
@@ -91,48 +91,48 @@ function AddDeduction({ employees, addDeductionVisibility, setAddDeductionVisibi
         // Perform computation based on deduction type
         switch (type) {
             case "pagibig":
-                if (netSalary === 0) {
+                if (grossSalary === 0) {
                     amount = 0;
-                } else if (netSalary > 1000 && netSalary <= 1500) {
-                    amount = netSalary * 0.01; // 1% deduction if netSalary is between 1000 and 1500
-                } else if (netSalary > 1500) {
-                    amount = netSalary * 0.02; // 2% deduction if netSalary is greater than 1500
+                } else if (grossSalary > 1000 && grossSalary <= 1500) {
+                    amount = grossSalary * 0.01; // 1% deduction if netSalary is between 1000 and 1500
+                } else if (grossSalary > 1500) {
+                    amount = grossSalary * 0.02; // 2% deduction if netSalary is greater than 1500
                 } // Assuming PAGIBIG deduction rate is 2% of salary
                 break;
             case "sss":
-                amount = netSalary * 0.045;
+                amount = grossSalary * 0.045;
                 break;
             case "philhealth":
-                amount = netSalary * 0.05; // Assuming PhilHealth deduction rate is 5% of salary
+                amount = grossSalary * 0.05; 
                 break;
             case "taxIncome":
-                if (0 <= netAnnualSalary && netAnnualSalary < 250000) {
+                if (0 <= grossAnnualSalary && grossAnnualSalary < 250000) {
                     taxableIncome = 0;
                     fixedTax = 0;
                     taxRate = 0.0;
                     amount = (taxableIncome * taxRate + fixedTax)/12;
-                } else if (250000 <= netAnnualSalary && netAnnualSalary < 400000) {
-                    taxableIncome = netAnnualSalary - 250000;
+                } else if (250000 <= grossAnnualSalary && grossAnnualSalary < 400000) {
+                    taxableIncome = grossAnnualSalary - 250000;
                     fixedTax = 0;
                     taxRate = 0.15;
                     amount = (taxableIncome * taxRate + fixedTax)/12;
-                } else if (400000 <= netAnnualSalary && netAnnualSalary < 800000) {
-                    taxableIncome = netAnnualSalary - 400000;
+                } else if (400000 <= grossAnnualSalary && grossAnnualSalary < 800000) {
+                    taxableIncome = grossAnnualSalary - 400000;
                     fixedTax = 22500/12;
                     taxRate = 0.2;
                     amount = (taxableIncome * taxRate + fixedTax)/12;
-                } else if (800000 <= netAnnualSalary && netAnnualSalary < 2000000) {
-                    taxableIncome = netAnnualSalary - 800000;
+                } else if (800000 <= grossAnnualSalary && grossAnnualSalary < 2000000) {
+                    taxableIncome = grossAnnualSalary - 800000;
                     fixedTax = 102500/12;
                     taxRate = 0.25;
                     tax = (taxableIncome * taxRate + fixedTax)/12;
-                } else if (2000000 <= netAnnualSalary && netAnnualSalary < 8000000) {
-                    taxableIncome = netAnnualSalary - 2000000;
+                } else if (2000000 <= grossAnnualSalary && grossAnnualSalary < 8000000) {
+                    taxableIncome = grossAnnualSalary - 2000000;
                     fixedTax = 402500/12;
                     taxRate = 0.3;
                     amount = (taxableIncome * taxRate + fixedTax)/12;
-                } else if (8000000 <= netAnnualSalary) {
-                    taxableIncome = netAnnualSalary - 8000000;
+                } else if (8000000 <= grossAnnualSalary) {
+                    taxableIncome = grossAnnualSalary - 8000000;
                     fixedTax = 2202500/12;
                     taxRate = 0.35;
                     amount = (taxableIncome * taxRate + fixedTax)/12;
